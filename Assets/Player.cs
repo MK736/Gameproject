@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -90,22 +91,25 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+            m_MoveInput = context.ReadValue<Vector2>();
 
-        m_MoveInput = context.ReadValue<Vector2>();
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    m_PlayerAnimmator.SetBool("is_running", true);
+                    break;
 
-        switch (context.phase)
-        {
-            case InputActionPhase.Started:
-                m_PlayerAnimmator.SetBool("is_running", true);
-                break;
+                case InputActionPhase.Canceled:
+                    m_PlayerAnimmator.SetBool("is_running", false);
+                    break;
+                default:
+                    break;
+            }
+    }
 
-            case InputActionPhase.Canceled:
-                m_PlayerAnimmator.SetBool("is_running", false);
-                break;
-            default:
-                break;
-        }
-
+    public void OnAtack(InputAction.CallbackContext context)
+    {
+            m_PlayerAnimmator.SetTrigger("atack");
     }
 
     public void OnJump(InputAction.CallbackContext context)
