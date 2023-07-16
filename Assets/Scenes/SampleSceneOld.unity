@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -357,6 +357,11 @@ MonoBehaviour:
   m_MaximumFOV: 60
   m_MinimumOrthoSize: 1
   m_MaximumOrthoSize: 5000
+--- !u!4 &662797987 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 953796097461342690, guid: 092dcc94af3f5874b8274144c84d76eb, type: 3}
+  m_PrefabInstance: {fileID: 9043434963012017890}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &662985624
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,11 +605,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2936b98971551c43b4ce0a3053b2ca6, type: 3}
---- !u!4 &778193447 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9043434963584652485, guid: 092dcc94af3f5874b8274144c84d76eb, type: 3}
-  m_PrefabInstance: {fileID: 9043434963012017890}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,7 +860,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 778193447}
+  m_Follow: {fileID: 662797987}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
