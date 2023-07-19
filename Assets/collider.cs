@@ -16,6 +16,10 @@ public class collider : MonoBehaviour
 
     Animator playerAnim = null;
 
+    string playeranimname;
+
+    string nowplayeranim = "RightHand@Attack01";
+
 
     // Start is called before the first frame update
     void Awake()
@@ -39,10 +43,15 @@ public class collider : MonoBehaviour
 
         clipPlayerinfo = playerAnim.GetCurrentAnimatorClipInfo(0)[0];
 
-        if (other.CompareTag("weapon"))
+        playeranimname = clipPlayerinfo.clip.name;
+
+        if (playeranimname == nowplayeranim)
         {
-            Debug.Log("hit");
-            m_bear.SetBool("Death", true);
+            if (other.CompareTag("weapon"))
+            {
+                //Debug.Log("hit");
+                m_bear.SetBool("Death", true);
+            }
         }
 
     }
