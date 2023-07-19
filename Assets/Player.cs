@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     Vector3 m_MoveDirection;
     Quaternion targetRotation;
 
-    Animator m_PlayerAnimmator = null;
+    public Animator m_PlayerAnimmator = null;
 
     Vector2 m_MoveInput;
 
