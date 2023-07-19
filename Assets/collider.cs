@@ -20,6 +20,8 @@ public class collider : MonoBehaviour
 
     string nowplayeranim = "RightHand@Attack01";
 
+    byte bearhp = 5;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -49,8 +51,17 @@ public class collider : MonoBehaviour
         {
             if (other.CompareTag("weapon"))
             {
+                bearhp--;
                 //Debug.Log("hit");
-                m_bear.SetBool("Death", true);
+
+                if (bearhp <= 0)
+                {
+                    m_bear.SetBool("Death", true);
+                    Destroy(gameObject, 3.0f);
+                }
+                else {
+                    m_bear.SetTrigger("Get Hit Front");
+                }
             }
         }
 
