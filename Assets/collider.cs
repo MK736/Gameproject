@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class collider : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class collider : MonoBehaviour
 
     byte bearhp = 5;
 
+    private NavMeshAgent navMeshAgent;
 
     // Start is called before the first frame update
     void Awake()
@@ -29,13 +31,27 @@ public class collider : MonoBehaviour
         m_bear = GetComponent<Animator>();
         player = GameObject.Find("Women1");
         m_player = player.GetComponent<Player>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        Target();
 
+    }
 
+    void Target()
+    {
+
+        if (bearhp <= 0)
+        {
+            navMeshAgent.isStopped = true;
+        }
+        else
+        {
+            navMeshAgent.destination = player.transform.position;
+        }
     }
 
 
@@ -53,14 +69,16 @@ public class collider : MonoBehaviour
             {
                 bearhp--;
                 //Debug.Log("hit");
+                navMeshAgent.isStopped = true;
 
                 if (bearhp <= 0)
                 {
                     m_bear.SetBool("Death", true);
-                    Destroy(gameObject, 3.0f);
+                    Destroy(gameObject, 3.3f);
                 }
                 else {
                     m_bear.SetTrigger("Get Hit Front");
+                    navMeshAgent.isStopped = false;
                 }
             }
         }
