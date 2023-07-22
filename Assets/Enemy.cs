@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
-public class collider : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     Animator m_bear = null;
 
@@ -13,15 +14,22 @@ public class collider : MonoBehaviour
 
     bool isBearHit = false;
 
+    bool isSee = false;
+
+
+    //bool hasAnim = false;
+
     //AnimatorClipInfo clipPlayerinfo;
     //Animator playerAnim = null;
     //string playeranimname;
 
     byte bearhp = 5;
 
-    private NavMeshAgent navMeshAgent;
+    NavMeshAgent navMeshAgent;
 
-    void Awake()
+
+
+    void Start()
     {
         m_bear = GetComponent<Animator>();
         player = GameObject.Find("Women1");
@@ -29,10 +37,20 @@ public class collider : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
-    void Update()
-    {
-        if (bearhp > 0 && isBearHit == false) { Target(); }
-    }
+    //void Update()
+    //{
+    //    //if (bearhp > 0 && isBearHit == false) { Target(); }
+
+    //    //if (hasAnim == false)
+    //    //{
+    //    //    BearRunAnimStop();
+    //    //}
+    //}
+
+    //void FixedUpdate()
+    //{
+    //    if (bearhp > 0 && isBearHit == false) { Target(); }
+    //}
 
     void Target()
     {
@@ -45,13 +63,47 @@ public class collider : MonoBehaviour
         //    navMeshAgent.destination = player.transform.position;
         //}
         //m_bear.SetBool("Run Forward", true);
-        //if (isBearHit == false)
-        //{
-            BearRunAnimGo();
+        if (isBearHit == false && bearhp > 0)
+        {
+            //BearRunAnimGo();
+            m_bear.SetBool("Detection", true);
             navMeshAgent.destination = player.transform.position;
-        //}
+        }
         //BearRunAnimGo();
     }
+
+    public void OnDetectObject(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            //if (bearhp > 0 && isBearHit == false) { Target(); }
+            isSee = true;
+            Target();
+            //hasAnim = true;
+        }
+        //else
+        //{
+        //    hasAnim = false;
+        //}
+
+    }
+
+
+    public void OutDetectObject(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            isSee = false;
+            //if (bearhp > 0 && isBearHit == false) { Target(); }
+            BearRunAnimStop();
+            //hasAnim = true;
+        }
+        //if (hasAnim)
+        //{
+        //m_bear.SetBool("Run Forward", false);
+        //}
+    }
+
 
     void IsBearHitTrue()
     {
@@ -65,12 +117,12 @@ public class collider : MonoBehaviour
 
     void BearRunAnimGo()
     {
-        m_bear.SetBool("Run Forward", true);
+        m_bear.SetBool("Detection", true);
     }
 
-    void BearRunAnimStop()
+    public void BearRunAnimStop()
     {
-        m_bear.SetBool("Run Forward", false);
+        m_bear.SetBool("Detection", false);
     }
 
     void BearStop()
@@ -105,8 +157,11 @@ public class collider : MonoBehaviour
                     //Destroy(gameObject, 3.2f);
 
                     m_bear.SetTrigger("Get Hit Front");
-                    Invoke("BearGo", 1.2f);
-                    Invoke("BearRunAnimGo", 1.2f);
+                    if (isSee == true)
+                    {
+                        Invoke("BearGo", 1.2f);
+                        Invoke("BearRunAnimGo", 1.2f);
+                    }
                 }
                 else {
                     //m_bear.SetTrigger("Get Hit Front");
