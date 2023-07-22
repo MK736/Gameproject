@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     bool isGround = true;
     bool wasGround = true;
 
+    public bool isAtack = false;
+
     [Header("Slope")]
     [SerializeField] float maxAngle = 45;
     float slopeCheckRayLength = 0.5f;
@@ -109,6 +111,7 @@ public class Player : MonoBehaviour
 
     public void OnAtack(InputAction.CallbackContext context)
     {
+        isAtack = true;
             m_PlayerAnimmator.SetTrigger("atack");
     }
 
