@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         m_bear = GetComponent<Animator>();
-        player = GameObject.Find("Women1");
+        player = GameObject.Find("boy");
         m_player = player.GetComponent<Player>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         m_Item = GetComponent<ItemManager>();
