@@ -65,13 +65,21 @@ public class Player : MonoBehaviour
     void Update()
     {
         CheckGround();
-        Rotate();
         SpeedControl();
+        //if (m_PlayerAnimmator.GetBool("atack") == true) return;
+        //{
+        //    Rotate();
+        //    Move();
+        //}
     }
 
     void FixedUpdate()
     {
-        Move();
+        if (m_PlayerAnimmator.GetBool("atack") == true) return;
+        {
+            Rotate();
+            Move();
+        }
     }
 
     void CheckGround()
@@ -94,7 +102,6 @@ public class Player : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
             m_MoveInput = context.ReadValue<Vector2>();
-
             switch (context.phase)
             {
                 case InputActionPhase.Started:
@@ -122,31 +129,34 @@ public class Player : MonoBehaviour
 
     void Move()
     {
+        //if (m_PlayerAnimmator.GetBool("atack") == true) return;
+        //{
+            m_MoveDirection = directionTransform.forward * m_MoveInput.y + directionTransform.right * m_MoveInput.x;
 
-        m_MoveDirection = directionTransform.forward * m_MoveInput.y + directionTransform.right * m_MoveInput.x;
+            // スロープ
+            if (OnSlope() && !exitSlope)
+            {
+                m_Rigidbody.AddForce(GetSlopeMoveDirection() * moveSpeed * 20.0f, ForceMode.Force);
 
-        // スロープ
-        if (OnSlope() && !exitSlope)
-        {
-            m_Rigidbody.AddForce(GetSlopeMoveDirection() * moveSpeed * 20.0f, ForceMode.Force);
+                if (m_Rigidbody.velocity.y > 0)
+                    m_Rigidbody.AddForce(Vector3.down * 80.0f, ForceMode.Force);
+            }
 
-            if (m_Rigidbody.velocity.y > 0)
-                m_Rigidbody.AddForce(Vector3.down * 80.0f, ForceMode.Force);
-        }
+            // 地上
+            else if (isGround)
+            {
+                m_Rigidbody.AddForce(m_MoveDirection.normalized * moveSpeed * 10.0f, ForceMode.Force);
+            }
 
-        // 地上
-        else if (isGround)
-        {
-            m_Rigidbody.AddForce(m_MoveDirection.normalized * moveSpeed * 10.0f, ForceMode.Force);
-        }
+            // 空中
+            else if (!isGround)
+            {
+                m_Rigidbody.AddForce(m_MoveDirection.normalized * moveSpeed * 10.0f * jumpMultiple, ForceMode.Force);
+            }
 
-        // 空中
-        else if (!isGround)
-        {
-            m_Rigidbody.AddForce(m_MoveDirection.normalized * moveSpeed * 10.0f * jumpMultiple, ForceMode.Force);
-        }
+            m_Rigidbody.useGravity = !OnSlope();
 
-        m_Rigidbody.useGravity = !OnSlope();
+        //}
     }
 
     void SpeedControl()

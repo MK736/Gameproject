@@ -11,17 +11,16 @@ public class collider : MonoBehaviour
 
     Player m_player;
 
+    bool isBearHit = false;
+
     //AnimatorClipInfo clipPlayerinfo;
-
     //Animator playerAnim = null;
-
     //string playeranimname;
 
     byte bearhp = 5;
 
     private NavMeshAgent navMeshAgent;
 
-    // Start is called before the first frame update
     void Awake()
     {
         m_bear = GetComponent<Animator>();
@@ -30,21 +29,13 @@ public class collider : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
-
-        if (bearhp > 0)
-        {
-            Target();
-        }
-
+        if (bearhp > 0 && isBearHit == false) { Target(); }
     }
 
     void Target()
     {
-
         //if (bearhp == 0)
         //{
         //    BearStop();
@@ -53,8 +44,33 @@ public class collider : MonoBehaviour
         //{
         //    navMeshAgent.destination = player.transform.position;
         //}
+        //m_bear.SetBool("Run Forward", true);
+        //if (isBearHit == false)
+        //{
+            BearRunAnimGo();
+            navMeshAgent.destination = player.transform.position;
+        //}
+        //BearRunAnimGo();
+    }
+
+    void IsBearHitTrue()
+    {
+        isBearHit = true;
+    }
+
+    void IsBearHitFalse()
+    {
+        isBearHit = false;
+    }
+
+    void BearRunAnimGo()
+    {
         m_bear.SetBool("Run Forward", true);
-        navMeshAgent.destination = player.transform.position;
+    }
+
+    void BearRunAnimStop()
+    {
+        m_bear.SetBool("Run Forward", false);
     }
 
     void BearStop()
@@ -71,18 +87,17 @@ public class collider : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //playerAnim = m_player.m_PlayerAnimmator;
-
         //clipPlayerinfo = playerAnim.GetCurrentAnimatorClipInfo(0)[0];
-
         //playeranimname = clipPlayerinfo.clip.name;
-
-        if (m_player.isAtack == true)
+        if (m_player.isAtack == true && bearhp != 0)
         {
             if (other.CompareTag("weapon"))
             {
-                m_bear.SetBool("Run Forward", false);
-                bearhp--;
+                isBearHit = true;
                 BearStop();
+                //m_bear.SetBool("Run Forward", false);
+                BearRunAnimStop();
+                bearhp--;
                 if (bearhp != 0)
                 {
                     //BearStop();
@@ -90,16 +105,17 @@ public class collider : MonoBehaviour
                     //Destroy(gameObject, 3.2f);
 
                     m_bear.SetTrigger("Get Hit Front");
-                    Invoke("BearGo", 0.5f);
+                    Invoke("BearGo", 1.2f);
+                    Invoke("BearRunAnimGo", 1.2f);
                 }
                 else {
                     //m_bear.SetTrigger("Get Hit Front");
                     //Invoke("BearGo", 1.0f);
-
                     BearDeth();
                 }
             }
             m_player.isAtack = false;
+            Invoke("IsBearHitFalse", 1.2f);
         }
 
     }
