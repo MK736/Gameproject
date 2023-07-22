@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
     public void OnAtack(InputAction.CallbackContext context)
     {
         isAtack = true;
-            m_PlayerAnimmator.SetTrigger("atack");
+        m_PlayerAnimmator.SetTrigger("atack");
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -129,8 +129,6 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        //if (m_PlayerAnimmator.GetBool("atack") == true) return;
-        //{
             m_MoveDirection = directionTransform.forward * m_MoveInput.y + directionTransform.right * m_MoveInput.x;
 
             // ÉXÉçÅ[Év
@@ -155,8 +153,6 @@ public class Player : MonoBehaviour
             }
 
             m_Rigidbody.useGravity = !OnSlope();
-
-        //}
     }
 
     void SpeedControl()

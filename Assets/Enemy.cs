@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
 
     Player m_player;
 
+    private ItemManager m_Item;
+
     bool isBearHit = false;
 
     bool isSee = false;
@@ -35,6 +37,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("Women1");
         m_player = player.GetComponent<Player>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        m_Item = GetComponent<ItemManager>();
     }
 
     //void Update()
@@ -180,6 +183,7 @@ public class Enemy : MonoBehaviour
         BearStop();
         m_bear.SetBool("Death", true);
         Destroy(gameObject, 3.2f);
+        m_Item.ItemDrop();
     }
 
 
