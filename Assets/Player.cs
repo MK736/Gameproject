@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
     readonly float GRAVITY = 9.81f;
     readonly Vector2 VECTOR2_ZERO = new Vector2(0, 0);
 
-    void Start()
+    void Awake()
     {
         m_CameraTransform = Camera.main.transform;
 
@@ -66,21 +66,21 @@ public class Player : MonoBehaviour
     {
         CheckGround();
         SpeedControl();
+        //if (m_PlayerAnimmator.GetBool("atack") == true) return;
+        //{
+        //    Rotate();
+        //    Move();
+        //}
+    }
+
+    void FixedUpdate()
+    {
         if (m_PlayerAnimmator.GetBool("atack") == true) return;
         {
             Rotate();
             Move();
         }
     }
-
-    //void FixedUpdate()
-    //{
-    //    if (m_PlayerAnimmator.GetBool("atack") == true) return;
-    //    {
-    //        Rotate();
-    //        Move();
-    //    }
-    //}
 
     void CheckGround()
     {

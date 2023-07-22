@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    void Start()
+    void Awake()
     {
         m_bear = GetComponent<Animator>();
         player = GameObject.Find("Women1");
