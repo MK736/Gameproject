@@ -31,6 +31,16 @@ public class Enemy : MonoBehaviour
     private Transform rightdown;
 
 
+    public enum EnemyAiState
+    {
+        WAIT,
+        MOVE,
+        ATTACK,
+        IDLE,
+        DEATHS
+    }
+    public EnemyAiState aiState = EnemyAiState.WAIT;
+
 
     //bool hasAnim = false;
 
@@ -58,6 +68,25 @@ public class Enemy : MonoBehaviour
     }
 
     private void Update()
+    {
+        //if (isSee == false)
+        //{
+        //    float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
+        //    if (sqrDistanceToTarget < changeTargetSqrDistance)
+        //    {
+        //        targetPosition = GetRandomPositionOnLevel1();
+        //    }
+
+        //    Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
+
+        //    BearRunAnimGo();
+        //    transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        //}
+        Serch();
+    }
+
+    public void Serch()
     {
         if (isSee == false)
         {
@@ -138,7 +167,8 @@ public class Enemy : MonoBehaviour
         {
             isSee = false;
             //if (bearhp > 0 && isBearHit == false) { Target(); }
-            BearRunAnimStop();
+            //BearRunAnimStop();
+
             //hasAnim = true;
         }
         //if (hasAnim)
