@@ -86,6 +86,25 @@ public class Enemy : MonoBehaviour
         Serch();
     }
 
+
+    public void SetAi()
+    {
+        InitAi();
+        AiMainRoutine();
+
+    }
+
+    void InitAi()
+    {
+
+    }
+
+
+    void AiMainRoutine()
+    {
+
+    }
+
     public void Serch()
     {
         if (isSee == false)
