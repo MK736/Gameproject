@@ -8,7 +8,8 @@ public class Item : MonoBehaviour
 
     public enum Type
     {
-        Beaf
+        Beaf,
+        Heal
     }
 
 
