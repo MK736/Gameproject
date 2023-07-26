@@ -19,6 +19,19 @@ public class Enemy : MonoBehaviour
     bool isSee = false;
 
 
+    private float speed = 5.0f;
+    private float rotationSmooth = 1f;
+
+    private Vector3 targetPosition;
+
+    private float changeTargetSqrDistance = 10.0f;
+    [SerializeField]
+    private Transform leftup;
+    [SerializeField]
+    private Transform rightdown;
+
+
+
     //bool hasAnim = false;
 
     //AnimatorClipInfo clipPlayerinfo;
@@ -29,8 +42,6 @@ public class Enemy : MonoBehaviour
 
     NavMeshAgent navMeshAgent;
 
-
-
     void Awake()
     {
         m_bear = GetComponent<Animator>();
@@ -38,8 +49,37 @@ public class Enemy : MonoBehaviour
         m_player = player.GetComponent<Player>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         m_Item = GetComponent<ItemManager>();
+
     }
 
+    private void Start()
+    {
+        targetPosition = GetRandomPositionOnLevel1();
+    }
+
+    private void Update()
+    {
+        if (isSee == false)
+        {
+            float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
+            if (sqrDistanceToTarget < changeTargetSqrDistance)
+            {
+                targetPosition = GetRandomPositionOnLevel1();
+            }
+
+            Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
+
+            BearRunAnimGo();
+            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        }
+    }
+
+    public Vector3 GetRandomPositionOnLevel1()
+    {
+        //float levelSize = 1000.0f;
+        return new Vector3(Random.Range(leftup.position.x,rightdown.position.x), 0, Random.Range(rightdown.position.z, leftup.position.z));
+    }
     //void Update()
     //{
     //    //if (bearhp > 0 && isBearHit == false) { Target(); }
@@ -153,6 +193,11 @@ public class Enemy : MonoBehaviour
                 //m_bear.SetBool("Run Forward", false);
                 BearRunAnimStop();
                 bearhp--;
+                if (isSee == false)
+                {
+                    transform.Rotate(new Vector3(180, 0, 0));
+                    BearGo();
+                }
                 if (bearhp != 0)
                 {
                     //BearStop();
