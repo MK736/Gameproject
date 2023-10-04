@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using UnityEngine.Scripting.APIUpdating;
 
 public class Enemy : MonoBehaviour
 {
@@ -18,7 +19,6 @@ public class Enemy : MonoBehaviour
 
     bool isSee = false;
 
-
     private float speed = 5.0f;
     private float rotationSmooth = 1f;
 
@@ -30,23 +30,16 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Transform rightdown;
 
-
     public enum EnemyAiState
     {
         WAIT,
         MOVE,
         ATTACK,
-        IDLE,
-        DEATHS
+        MOVEANDATACK,
+        IDLE
     }
     public EnemyAiState aiState = EnemyAiState.WAIT;
-
-
-    //bool hasAnim = false;
-
-    //AnimatorClipInfo clipPlayerinfo;
-    //Animator playerAnim = null;
-    //string playeranimname;
+    public EnemyAiState nextState;
 
     byte bearhp = 5;
 
@@ -69,133 +62,108 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        //if (isSee == false)
-        //{
-        //    float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
-        //    if (sqrDistanceToTarget < changeTargetSqrDistance)
-        //    {
-        //        targetPosition = GetRandomPositionOnLevel1();
-        //    }
-
-        //    Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
-
-        //    BearRunAnimGo();
-        //    transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //}
-        Serch();
+        UpdateAI();
     }
 
 
     public void SetAi()
     {
+
         InitAi();
         AiMainRoutine();
+        aiState = nextState;
 
     }
 
     void InitAi()
     {
-
+        targetPosition = GetRandomPositionOnLevel1();
+        nextState = EnemyAiState.MOVE;
     }
 
 
     void AiMainRoutine()
     {
-
-    }
-
-    public void Serch()
-    {
-        if (isSee == false)
+        if(isSee == true)
         {
-            float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
-            if (sqrDistanceToTarget < changeTargetSqrDistance)
-            {
-                targetPosition = GetRandomPositionOnLevel1();
-            }
-
-            Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
-
-            BearRunAnimGo();
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            nextState = EnemyAiState.MOVEANDATACK;
+        }
+        else if(isSee == false)
+        {
+            nextState=EnemyAiState.MOVE;
         }
     }
 
-    public Vector3 GetRandomPositionOnLevel1()
+    void UpdateAI()
     {
-        //float levelSize = 1000.0f;
-        return new Vector3(Random.Range(leftup.position.x,rightdown.position.x), 0, Random.Range(rightdown.position.z, leftup.position.z));
+        SetAi();
+
+        switch (aiState)
+        {
+            case EnemyAiState.WAIT:
+                Wait();
+            break;
+
+            case EnemyAiState.MOVE:
+                Move();
+            break;
+
+            case EnemyAiState.MOVEANDATACK:
+                MoveAndAtack();
+            break;
+        }
     }
-    //void Update()
-    //{
-    //    //if (bearhp > 0 && isBearHit == false) { Target(); }
 
-    //    //if (hasAnim == false)
-    //    //{
-    //    //    BearRunAnimStop();
-    //    //}
-    //}
-
-    //void FixedUpdate()
-    //{
-    //    if (bearhp > 0 && isBearHit == false) { Target(); }
-    //}
-
-    void Target()
+    void Wait()
     {
-        //if (bearhp == 0)
-        //{
-        //    BearStop();
-        //}
-        //else
-        //{
-        //    navMeshAgent.destination = player.transform.position;
-        //}
-        //m_bear.SetBool("Run Forward", true);
+    }
+    void Move()
+    {
+        float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
+        if (sqrDistanceToTarget < changeTargetSqrDistance)
+        {
+            targetPosition = GetRandomPositionOnLevel1();
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
+
+        BearRunAnimGo();
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        Debug.Log("Serch");
+    }
+
+    void MoveAndAtack()
+    {
         if (isBearHit == false && bearhp > 0)
         {
             //BearRunAnimGo();
             m_bear.SetBool("Detection", true);
             navMeshAgent.destination = player.transform.position;
         }
-        //BearRunAnimGo();
+        Debug.Log("”­Œ©");
+    }
+    public Vector3 GetRandomPositionOnLevel1()
+    {
+        return new Vector3(Random.Range(leftup.position.x,rightdown.position.x), 0, Random.Range(rightdown.position.z, leftup.position.z));
     }
 
     public void OnDetectObject(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
-            //if (bearhp > 0 && isBearHit == false) { Target(); }
             isSee = true;
-            Target();
-            //hasAnim = true;
         }
-        //else
-        //{
-        //    hasAnim = false;
-        //}
-
     }
-
 
     public void OutDetectObject(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
             isSee = false;
-            //if (bearhp > 0 && isBearHit == false) { Target(); }
-            //BearRunAnimStop();
-
-            //hasAnim = true;
+            //navMeshAgent.destination = new Vector3(Random.Range(leftup.position.x, rightdown.position.x), 0, Random.Range(rightdown.position.z, leftup.position.z));
         }
-        //if (hasAnim)
-        //{
-        //m_bear.SetBool("Run Forward", false);
-        //}
     }
-
 
     void IsBearHitTrue()
     {
@@ -227,19 +195,14 @@ public class Enemy : MonoBehaviour
         navMeshAgent.isStopped = false;
     }
 
-
     void OnTriggerEnter(Collider other)
     {
-        //playerAnim = m_player.m_PlayerAnimmator;
-        //clipPlayerinfo = playerAnim.GetCurrentAnimatorClipInfo(0)[0];
-        //playeranimname = clipPlayerinfo.clip.name;
         if (m_player.isAtack == true && bearhp != 0)
         {
             if (other.CompareTag("weapon"))
             {
                 isBearHit = true;
                 BearStop();
-                //m_bear.SetBool("Run Forward", false);
                 BearRunAnimStop();
                 bearhp--;
                 if (isSee == false)
@@ -249,10 +212,6 @@ public class Enemy : MonoBehaviour
                 }
                 if (bearhp != 0)
                 {
-                    //BearStop();
-                    //m_bear.SetBool("Death", true);
-                    //Destroy(gameObject, 3.2f);
-
                     m_bear.SetTrigger("Get Hit Front");
                     if (isSee == true)
                     {
@@ -261,15 +220,12 @@ public class Enemy : MonoBehaviour
                     }
                 }
                 else {
-                    //m_bear.SetTrigger("Get Hit Front");
-                    //Invoke("BearGo", 1.0f);
                     BearDeth();
                 }
             }
             m_player.isAtack = false;
             Invoke("IsBearHitFalse", 1.2f);
         }
-
     }
 
     void BearDeth()
@@ -279,6 +235,4 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject, 3.2f);
         m_Item.ItemDrop();
     }
-
-
 }
