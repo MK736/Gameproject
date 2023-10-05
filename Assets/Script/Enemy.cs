@@ -19,6 +19,8 @@ public class Enemy : MonoBehaviour
 
     bool isSee = false;
 
+    bool isWait = true;
+
     private float speed = 5.0f;
     private float rotationSmooth = 1f;
 
@@ -57,7 +59,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        targetPosition = GetRandomPositionOnLevel1();
+        navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
     }
 
     private void Update()
@@ -77,20 +79,31 @@ public class Enemy : MonoBehaviour
 
     void InitAi()
     {
-        targetPosition = GetRandomPositionOnLevel1();
+        //navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
         nextState = EnemyAiState.MOVE;
     }
-
+    //“¦‚°Ø‚Á‚½‚ ‚ÆêŠ‚ÍŒˆ‚Ü‚Á‚Ä‚¢‚é‚ª“®‚©‚È‚¢
+    //êŠ‚ğˆê‰ñ‚¾‚¯Œˆ‚ß‚é–Ú“I’n‚É‚Â‚¯‚ÎÄ“xêŠ‚ğŒˆ‚ß‚é
+    //êŠŒˆ‚ß‚ÍÅ‰‚Æ“¦‚°Ø‚Á‚½Œã‚¾‚¯
 
     void AiMainRoutine()
     {
-        if(isSee == true)
+        //if(isWait)
+        //{
+        //    nextState = EnemyAiState.WAIT;
+        //    isWait = false;
+        //    return;
+        //}
+        if(isSee)
         {
             nextState = EnemyAiState.MOVEANDATACK;
+            Debug.Log("”­Œ©");
         }
-        else if(isSee == false)
+        else
         {
-            nextState=EnemyAiState.MOVE;
+            targetPosition = GetRandomPositionOnLevel1();
+            nextState = EnemyAiState.MOVE;
+            Debug.Log("“¦‚µ‚½");
         }
     }
 
@@ -116,19 +129,23 @@ public class Enemy : MonoBehaviour
 
     void Wait()
     {
+        //BearRunAnimStop();
+        //BearStop();
+
     }
     void Move()
     {
         float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
         if (sqrDistanceToTarget < changeTargetSqrDistance)
         {
-            targetPosition = GetRandomPositionOnLevel1();
+            navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
 
         BearRunAnimGo();
+        BearGo();
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
         Debug.Log("Serch");
     }
