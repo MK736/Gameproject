@@ -32,6 +32,13 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Transform rightdown;
 
+    public Vector3[] wayPoints = new Vector3[3];
+    private int currentRoot;
+    private int Mode;
+    public Transform g_Player;
+    public Transform g_EnemyPos;
+
+
     public enum EnemyAiState
     {
         WAIT,
@@ -135,19 +142,51 @@ public class Enemy : MonoBehaviour
     }
     void Move()
     {
-        float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
-        if (sqrDistanceToTarget < changeTargetSqrDistance)
-        {
-            navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
-        }
+        //float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
+        //if (sqrDistanceToTarget < changeTargetSqrDistance)
+        //{
+        //    navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
+        //}
 
-        Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
+        //Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
 
         BearRunAnimGo();
         BearGo();
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        Debug.Log("Serch");
+        //transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        //Debug.Log("Serch");
+
+        Vector3 pos = wayPoints[currentRoot];
+        float distance = Vector3.Distance(g_EnemyPos.position, g_Player.transform.position);
+
+        if (distance > 25) {
+            Mode = 0;
+        }
+
+        if (distance < 25)
+        {
+            Mode = 1;
+        }
+
+        switch(Mode)
+        {
+            case 0:
+                if (Vector3.Distance (transform.position, pos) < 1f)
+                {
+                    currentRoot += 1;
+                    if (currentRoot > wayPoints.Length - 1)
+                    {
+                        currentRoot = 0;
+                    }
+                }
+                GetComponent<NavMeshAgent>().SetDestination(pos);
+                break;
+
+                case 1:
+                navMeshAgent.destination = player.transform.position;
+                break;
+        }
+
     }
 
     void MoveAndAtack()
