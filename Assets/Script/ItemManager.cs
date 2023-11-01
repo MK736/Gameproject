@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Item))]
 public class ItemManager : MonoBehaviour
 {
 

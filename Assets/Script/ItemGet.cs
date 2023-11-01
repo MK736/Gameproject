@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(Player))]
-[RequireComponent(typeof(ItemManager))]
-
 public class ItemGet : MonoBehaviour
 {
 

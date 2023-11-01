@@ -7,9 +7,7 @@ using UnityEngine.Scripting.APIUpdating;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(DestinationController))]
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Player))]
-[RequireComponent(typeof(ItemManager))]
+
 public class Enemy : MonoBehaviour
 {
     Animator m_bear = null;
@@ -23,6 +21,8 @@ public class Enemy : MonoBehaviour
     bool isBearHit = false;
 
     bool isSee = false;
+
+    bool isAttack = false;
 
     public Vector3[] wayPoints = new Vector3[3];
     public enum EnemyAiState
@@ -72,15 +72,25 @@ public class Enemy : MonoBehaviour
 
     void AiMainRoutine()
     {
-        if(isSee)
+        //if (isAttack)
+        //{
+        //    nextState = EnemyAiState.ATTACK;
+        //    Debug.Log("çUåÇ");
+        //}
+        if (isSee)
         {
             nextState = EnemyAiState.MOVEANDATACK;
-            //Debug.Log("î≠å©");
+            Debug.Log("î≠å©");
         }
+        //if(isAttack)
+        //{
+        //    nextState = EnemyAiState.ATTACK;
+        //    Debug.Log("çUåÇ");
+        //}
         else
         {
             nextState = EnemyAiState.MOVE;
-            //Debug.Log("ì¶ÇµÇΩ");
+            Debug.Log("ì¶ÇµÇΩ");
         }
     }
     void UpdateAI()
@@ -100,6 +110,9 @@ public class Enemy : MonoBehaviour
             case EnemyAiState.MOVEANDATACK:
                 MoveAndAtack();
             break;
+            case EnemyAiState.ATTACK:
+                Attack();
+                break;
         }
     }
 
@@ -128,11 +141,43 @@ public class Enemy : MonoBehaviour
             m_bear.SetBool("Detection", true);
             navMeshAgent.destination = player.transform.position;
         }
-        //Debug.Log("î≠å©");
+        //if(Vector3.Distance(transform.position, m_player.transform.position) < 20.0f)
+        //{
+        //    Debug.Log("Attack");
+        //    nextState = EnemyAiState.ATTACK;
+        //}
+        Debug.Log("î≠å©");
+    }
+
+    void Attack()
+    {
+        //if (Vector3.Distance(transform.position, m_player.transform.position) > 5.0f)
+        //{
+        //    nextState = EnemyAiState.MOVEANDATACK;
+        //}
+        Debug.Log("çUåÇ");
+        navMeshAgent.isStopped = true;
+        BearRunAnimStop();
+        BearAtackAnim();
+    }
+
+    public void OnAttack(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            isAttack = true;
+        }
+    }
+    public void OutAttack(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            isAttack = false;
+        }
     }
     public void OnDetectObject(Collider collider)
     {
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player") && isAttack == false)
         {
             isSee = true;
         }
@@ -152,6 +197,11 @@ public class Enemy : MonoBehaviour
     void IsBearHitFalse()
     {
         isBearHit = false;
+    }
+
+    void BearAtackAnim()
+    {
+        m_bear.SetBool("Attack1", true);
     }
 
     void BearRunAnimGo()

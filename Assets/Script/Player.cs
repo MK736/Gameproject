@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
 {
     [Header("Transform")]
