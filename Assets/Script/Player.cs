@@ -47,8 +47,8 @@ public class Player : MonoBehaviour
 
     Vector2 m_MoveInput;
 
-    readonly float GROUND_DRAG = 5;
-    readonly float GRAVITY = 9.81f;
+    //readonly float GROUND_DRAG = 5;
+    //readonly float GRAVITY = 9.81f;
     readonly Vector2 VECTOR2_ZERO = new Vector2(0, 0);
 
     void Awake()

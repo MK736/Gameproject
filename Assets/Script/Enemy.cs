@@ -5,6 +5,8 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.Scripting.APIUpdating;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(DestinationController))]
 public class Enemy : MonoBehaviour
 {
     Animator m_bear = null;
@@ -19,25 +21,7 @@ public class Enemy : MonoBehaviour
 
     bool isSee = false;
 
-    bool isWait = true;
-
-    private float speed = 5.0f;
-    private float rotationSmooth = 1f;
-
-    private Vector3 targetPosition;
-
-    private float changeTargetSqrDistance = 10.0f;
-    [SerializeField]
-    private Transform leftup;
-    [SerializeField]
-    private Transform rightdown;
-
     public Vector3[] wayPoints = new Vector3[3];
-    private int currentRoot;
-    private int Mode;
-    public Transform g_Player;
-    public Transform g_EnemyPos;
-
 
     public enum EnemyAiState
     {
@@ -52,7 +36,9 @@ public class Enemy : MonoBehaviour
 
     byte bearhp = 5;
 
-    NavMeshAgent navMeshAgent;
+    private NavMeshAgent navMeshAgent = null;
+
+    [SerializeField] private DestinationController destinationController;
 
     void Awake()
     {
@@ -61,12 +47,9 @@ public class Enemy : MonoBehaviour
         m_player = player.GetComponent<Player>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         m_Item = GetComponent<ItemManager>();
+        destinationController = GetComponent<DestinationController>();
+        navMeshAgent.SetDestination(destinationController.GetDestination());
 
-    }
-
-    private void Start()
-    {
-        navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
     }
 
     private void Update()
@@ -74,43 +57,29 @@ public class Enemy : MonoBehaviour
         UpdateAI();
     }
 
-
     public void SetAi()
     {
-
         InitAi();
         AiMainRoutine();
         aiState = nextState;
-
     }
 
     void InitAi()
     {
-        //navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
         nextState = EnemyAiState.MOVE;
     }
-    //ì¶Ç∞êÿÇ¡ÇΩÇ†Ç∆èÍèäÇÕåàÇ‹Ç¡ÇƒÇ¢ÇÈÇ™ìÆÇ©Ç»Ç¢
-    //èÍèäÇàÍâÒÇæÇØåàÇﬂÇÈñ⁄ìIínÇ…Ç¬ÇØÇŒçƒìxèÍèäÇåàÇﬂÇÈ
-    //èÍèäåàÇﬂÇÕç≈èâÇ∆ì¶Ç∞êÿÇ¡ÇΩå„ÇæÇØ
 
     void AiMainRoutine()
     {
-        //if(isWait)
-        //{
-        //    nextState = EnemyAiState.WAIT;
-        //    isWait = false;
-        //    return;
-        //}
         if(isSee)
         {
             nextState = EnemyAiState.MOVEANDATACK;
-            Debug.Log("î≠å©");
+            //Debug.Log("î≠å©");
         }
         else
         {
-            targetPosition = GetRandomPositionOnLevel1();
             nextState = EnemyAiState.MOVE;
-            Debug.Log("ì¶ÇµÇΩ");
+            //Debug.Log("ì¶ÇµÇΩ");
         }
     }
 
@@ -137,71 +106,29 @@ public class Enemy : MonoBehaviour
     void Wait()
     {
         //BearRunAnimStop();
-        //BearStop();
+        navMeshAgent.isStopped = true;
 
     }
     void Move()
     {
-        //float sqrDistanceToTarget = Vector3.SqrMagnitude(transform.position - targetPosition);
-        //if (sqrDistanceToTarget < changeTargetSqrDistance)
-        //{
-        //    navMeshAgent.SetDestination(GetRandomPositionOnLevel1());
-        //}
-
-        //Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmooth);
-
         BearRunAnimGo();
         BearGo();
-        //transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //Debug.Log("Serch");
 
-        Vector3 pos = wayPoints[currentRoot];
-        float distance = Vector3.Distance(g_EnemyPos.position, g_Player.transform.position);
-
-        if (distance > 25) {
-            Mode = 0;
-        }
-
-        if (distance < 25)
+        if (Vector3.Distance(transform.position, destinationController.GetDestination()) < 10.0f)
         {
-            Mode = 1;
-        }
-
-        switch(Mode)
-        {
-            case 0:
-                if (Vector3.Distance (transform.position, pos) < 1f)
-                {
-                    currentRoot += 1;
-                    if (currentRoot > wayPoints.Length - 1)
-                    {
-                        currentRoot = 0;
-                    }
-                }
-                GetComponent<NavMeshAgent>().SetDestination(pos);
-                break;
-
-                case 1:
-                navMeshAgent.destination = player.transform.position;
-                break;
+            destinationController.CreateDetination();
+            navMeshAgent.SetDestination(destinationController.GetDestination());
         }
 
     }
-
     void MoveAndAtack()
     {
         if (isBearHit == false && bearhp > 0)
         {
-            //BearRunAnimGo();
             m_bear.SetBool("Detection", true);
             navMeshAgent.destination = player.transform.position;
         }
-        Debug.Log("î≠å©");
-    }
-    public Vector3 GetRandomPositionOnLevel1()
-    {
-        return new Vector3(Random.Range(leftup.position.x,rightdown.position.x), 0, Random.Range(rightdown.position.z, leftup.position.z));
+        //Debug.Log("î≠å©");
     }
 
     public void OnDetectObject(Collider collider)
@@ -217,7 +144,6 @@ public class Enemy : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             isSee = false;
-            //navMeshAgent.destination = new Vector3(Random.Range(leftup.position.x, rightdown.position.x), 0, Random.Range(rightdown.position.z, leftup.position.z));
         }
     }
 
@@ -241,11 +167,6 @@ public class Enemy : MonoBehaviour
         m_bear.SetBool("Detection", false);
     }
 
-    void BearStop()
-    {
-        navMeshAgent.isStopped = true;
-    }
-
     void BearGo()
     {
         navMeshAgent.isStopped = false;
@@ -258,13 +179,12 @@ public class Enemy : MonoBehaviour
             if (other.CompareTag("weapon"))
             {
                 isBearHit = true;
-                BearStop();
+                nextState = EnemyAiState.WAIT;
                 BearRunAnimStop();
                 bearhp--;
                 if (isSee == false)
                 {
-                    transform.Rotate(new Vector3(180, 0, 0));
-                    BearGo();
+                    navMeshAgent.destination = player.transform.position;
                 }
                 if (bearhp != 0)
                 {
@@ -286,7 +206,7 @@ public class Enemy : MonoBehaviour
 
     void BearDeth()
     {
-        BearStop();
+        nextState = EnemyAiState.WAIT;
         m_bear.SetBool("Death", true);
         Destroy(gameObject, 3.2f);
         m_Item.ItemDrop();
