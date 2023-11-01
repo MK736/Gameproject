@@ -72,21 +72,16 @@ public class Enemy : MonoBehaviour
 
     void AiMainRoutine()
     {
-        //if (isAttack)
-        //{
-        //    nextState = EnemyAiState.ATTACK;
-        //    Debug.Log("UŒ‚");
-        //}
-        if (isSee)
+        if (isAttack)
+        {
+            nextState = EnemyAiState.ATTACK;
+            Debug.Log("UŒ‚");
+        }
+        else if (isSee)
         {
             nextState = EnemyAiState.MOVEANDATACK;
             Debug.Log("”­Œ©");
         }
-        //if(isAttack)
-        //{
-        //    nextState = EnemyAiState.ATTACK;
-        //    Debug.Log("UŒ‚");
-        //}
         else
         {
             nextState = EnemyAiState.MOVE;
@@ -102,17 +97,15 @@ public class Enemy : MonoBehaviour
             case EnemyAiState.WAIT:
                 Wait();
             break;
-
-            case EnemyAiState.MOVE:
-                Move();
-            break;
-
             case EnemyAiState.MOVEANDATACK:
                 MoveAndAtack();
             break;
             case EnemyAiState.ATTACK:
                 Attack();
                 break;
+            case EnemyAiState.MOVE:
+                Move();
+            break;
         }
     }
 
@@ -151,10 +144,6 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        //if (Vector3.Distance(transform.position, m_player.transform.position) > 5.0f)
-        //{
-        //    nextState = EnemyAiState.MOVEANDATACK;
-        //}
         Debug.Log("UŒ‚");
         navMeshAgent.isStopped = true;
         BearRunAnimStop();
@@ -163,7 +152,7 @@ public class Enemy : MonoBehaviour
 
     public void OnAttack(Collider collider)
     {
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player")&& m_player.isAtack == false && bearhp > 0)
         {
             isAttack = true;
         }
@@ -172,21 +161,23 @@ public class Enemy : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
+            BearAtackAnimStop();
             isAttack = false;
         }
     }
     public void OnDetectObject(Collider collider)
     {
-        if (collider.CompareTag("Player") && isAttack == false)
+        if (collider.CompareTag("Player"))
         {
-            isSee = true;
+            navMeshAgent.destination = collider.transform.position;
         }
     }
     public void OutDetectObject(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
-            isSee = false;
+            destinationController.CreateDetination();
+            navMeshAgent.SetDestination(destinationController.GetDestination());
         }
     }
     void IsBearHitTrue()
@@ -201,7 +192,11 @@ public class Enemy : MonoBehaviour
 
     void BearAtackAnim()
     {
-        m_bear.SetBool("Attack1", true);
+        m_bear.SetBool("Atack1", true);
+    }
+    void BearAtackAnimStop()
+    {
+        m_bear.SetBool("Atack1", false);
     }
 
     void BearRunAnimGo()
@@ -225,8 +220,9 @@ public class Enemy : MonoBehaviour
             if (other.CompareTag("weapon"))
             {
                 isBearHit = true;
-                nextState = EnemyAiState.WAIT;
+                navMeshAgent.isStopped = true;
                 BearRunAnimStop();
+                BearAtackAnimStop();
                 bearhp--;
                 if (isSee == false)
                 {
@@ -251,7 +247,7 @@ public class Enemy : MonoBehaviour
     }
     void BearDeth()
     {
-        nextState = EnemyAiState.WAIT;
+        navMeshAgent.isStopped = true;
         m_bear.SetBool("Death", true);
         Destroy(gameObject, 3.2f);
         m_Item.ItemDrop();
