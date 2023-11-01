@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Player))]
+[RequireComponent(typeof(ItemManager))]
+
 public class ItemGet : MonoBehaviour
 {
 
@@ -19,12 +22,6 @@ public class ItemGet : MonoBehaviour
         m_player = player.GetComponent<Player>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
    void OnTriggerEnter(Collider other)
     {
         if (m_player.isAtack == true)
@@ -38,8 +35,4 @@ public class ItemGet : MonoBehaviour
         }
 
     }
-
-
-
-
 }

@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
 {
     [Header("Transform")]
@@ -47,8 +49,6 @@ public class Player : MonoBehaviour
 
     Vector2 m_MoveInput;
 
-    //readonly float GROUND_DRAG = 5;
-    //readonly float GRAVITY = 9.81f;
     readonly Vector2 VECTOR2_ZERO = new Vector2(0, 0);
 
     void Awake()
@@ -66,11 +66,6 @@ public class Player : MonoBehaviour
     {
         CheckGround();
         SpeedControl();
-        //if (m_PlayerAnimmator.GetBool("atack") == true) return;
-        //{
-        //    Rotate();
-        //    Move();
-        //}
     }
 
     void FixedUpdate()
@@ -115,7 +110,6 @@ public class Player : MonoBehaviour
                     break;
             }
     }
-
     public void OnAtack(InputAction.CallbackContext context)
     {
         isAtack = true;
@@ -186,7 +180,6 @@ public class Player : MonoBehaviour
         }
 
     }
-
     private void Jump()
     {
         if (ReadyJump && isGround) {

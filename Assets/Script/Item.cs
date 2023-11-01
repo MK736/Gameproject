@@ -12,7 +12,6 @@ public class Item : MonoBehaviour
         Heal
     }
 
-
     [SerializeField]
     public Type itemType = Type.Beaf;
     //アイテムの名前
@@ -43,18 +42,5 @@ public class Item : MonoBehaviour
     public int GetAmount()
     {
         return amount;
-    }
-
-
-
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

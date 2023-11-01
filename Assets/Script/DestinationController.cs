@@ -9,12 +9,9 @@ public class DestinationController : MonoBehaviour
     // –Ú“I’n
     [SerializeField] private Vector3 destination;
     [SerializeField] private Transform[] targets;
-    //[SerializeField] private int order = 0;
 
     public enum Route { random}
     public Route route;
-
-
 
     void Start()
     {
@@ -24,10 +21,7 @@ public class DestinationController : MonoBehaviour
 
     public void CreateDetination()
     {
-        //if (route == Route.random)
-        //{
             CreateRandomDestination();
-        //}
     }
 
     private void CreateRandomDestination()

@@ -7,6 +7,9 @@ using UnityEngine.Scripting.APIUpdating;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(DestinationController))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Player))]
+[RequireComponent(typeof(ItemManager))]
 public class Enemy : MonoBehaviour
 {
     Animator m_bear = null;
@@ -22,7 +25,6 @@ public class Enemy : MonoBehaviour
     bool isSee = false;
 
     public Vector3[] wayPoints = new Vector3[3];
-
     public enum EnemyAiState
     {
         WAIT,
@@ -63,7 +65,6 @@ public class Enemy : MonoBehaviour
         AiMainRoutine();
         aiState = nextState;
     }
-
     void InitAi()
     {
         nextState = EnemyAiState.MOVE;
@@ -82,7 +83,6 @@ public class Enemy : MonoBehaviour
             //Debug.Log("“¦‚µ‚½");
         }
     }
-
     void UpdateAI()
     {
         SetAi();
@@ -130,7 +130,6 @@ public class Enemy : MonoBehaviour
         }
         //Debug.Log("”­Œ©");
     }
-
     public void OnDetectObject(Collider collider)
     {
         if (collider.CompareTag("Player"))
@@ -138,7 +137,6 @@ public class Enemy : MonoBehaviour
             isSee = true;
         }
     }
-
     public void OutDetectObject(Collider collider)
     {
         if (collider.CompareTag("Player"))
@@ -146,7 +144,6 @@ public class Enemy : MonoBehaviour
             isSee = false;
         }
     }
-
     void IsBearHitTrue()
     {
         isBearHit = true;
@@ -166,7 +163,6 @@ public class Enemy : MonoBehaviour
     {
         m_bear.SetBool("Detection", false);
     }
-
     void BearGo()
     {
         navMeshAgent.isStopped = false;
@@ -203,7 +199,6 @@ public class Enemy : MonoBehaviour
             Invoke("IsBearHitFalse", 1.2f);
         }
     }
-
     void BearDeth()
     {
         nextState = EnemyAiState.WAIT;
