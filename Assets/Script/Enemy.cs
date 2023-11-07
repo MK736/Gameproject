@@ -51,7 +51,6 @@ public class Enemy : MonoBehaviour
         m_Item = GetComponent<ItemManager>();
         destinationController = GetComponent<DestinationController>();
         navMeshAgent.SetDestination(destinationController.GetDestination());
-
     }
 
     private void Update()
@@ -91,7 +90,6 @@ public class Enemy : MonoBehaviour
     void UpdateAI()
     {
         SetAi();
-
         switch (aiState)
         {
             case EnemyAiState.WAIT:
