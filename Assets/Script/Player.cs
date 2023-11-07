@@ -38,10 +38,14 @@ public class Player : MonoBehaviour
     private RaycastHit slopehit;
     private bool exitSlope;
 
+    public int g_PlayerHP = 20;
+
     Rigidbody m_Rigidbody;
     Transform m_CameraTransform;
     Vector3 m_MoveDirection;
     Quaternion targetRotation;
+
+    Enemy m_enemy;
 
     public Animator m_PlayerAnimmator = null;
 
@@ -57,6 +61,8 @@ public class Player : MonoBehaviour
         m_Rigidbody.drag = groundDrag;
         m_PlayerAnimmator = GetComponent<Animator>();
 
+        m_enemy = GetComponent<Enemy>();
+
         ReadyJump = true;
     }
 
@@ -64,6 +70,7 @@ public class Player : MonoBehaviour
     {
         CheckGround();
         SpeedControl();
+        //Debug.Log(g_PlayerHP);
     }
 
     void FixedUpdate()
@@ -119,6 +126,20 @@ public class Player : MonoBehaviour
         Jump();
     }
 
+    public void TakeDamage()
+    {
+        g_PlayerHP -= 1;
+        m_enemy.AtackEnd();
+        if (g_PlayerHP == 0)
+        {
+            Death();
+        }
+    }
+
+    void Death()
+    {
+        Debug.Log("Ž€–S");
+    }
     void Move()
     {
             m_MoveDirection = directionTransform.forward * m_MoveInput.y + directionTransform.right * m_MoveInput.x;

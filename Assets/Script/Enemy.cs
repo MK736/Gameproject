@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
 
     bool isSee = false;
 
-    bool isAttack = false;
+    public bool isAttack = false;
 
     public Vector3[] wayPoints = new Vector3[3];
     public enum EnemyAiState
@@ -37,6 +37,9 @@ public class Enemy : MonoBehaviour
     public EnemyAiState nextState;
 
     byte bearhp = 5;
+
+    [SerializeField]
+    private BoxCollider BoxCollider;
 
     private NavMeshAgent navMeshAgent = null;
 
@@ -74,17 +77,17 @@ public class Enemy : MonoBehaviour
         if (isAttack)
         {
             nextState = EnemyAiState.ATTACK;
-            Debug.Log("UŒ‚");
+            //Debug.Log("UŒ‚");
         }
         else if (isSee)
         {
             nextState = EnemyAiState.MOVEANDATACK;
-            Debug.Log("”­Œ©");
+            //Debug.Log("”­Œ©");
         }
         else
         {
             nextState = EnemyAiState.MOVE;
-            Debug.Log("“¦‚µ‚½");
+            //Debug.Log("“¦‚µ‚½");
         }
     }
     void UpdateAI()
@@ -137,20 +140,31 @@ public class Enemy : MonoBehaviour
         //    Debug.Log("Attack");
         //    nextState = EnemyAiState.ATTACK;
         //}
-        Debug.Log("”­Œ©");
+        //Debug.Log("”­Œ©");
     }
 
     void Attack()
     {
-        Debug.Log("UŒ‚");
+        //Debug.Log("UŒ‚");
         navMeshAgent.isStopped = true;
         BearRunAnimStop();
         BearAtackAnim();
+        AtackStart();
+    }
+
+    void AtackStart()
+    {
+        BoxCollider.enabled = true;
+    }
+
+    public void AtackEnd()
+    {
+        BoxCollider.enabled = false;
     }
 
     public void OnAttack(Collider collider)
     {
-        if (collider.CompareTag("Player")&& m_player.isAtack == false && bearhp > 0)
+        if (collider.CompareTag("Player")&& bearhp > 0)
         {
             isAttack = true;
         }
