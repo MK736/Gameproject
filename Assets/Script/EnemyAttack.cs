@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    Enemy m_enemy;
+    GameObject player;
     Player m_Player;
 
-    void Awake()
+    GameObject enemy;
+    Enemy m_Enemy;
+
+    void Start()
     {
-        m_enemy = GetComponent<Enemy>();
-        m_Player = GetComponent<Player>();
+        player = GameObject.Find("boy");
+        m_Player = player.GetComponent<Player>();
+        enemy = GameObject.Find("Enemy_Bear");
+        m_Enemy = enemy.GetComponent<Enemy>();
     }
-
-
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player") && m_Player.g_PlayerHP > 0)
         {
-            Debug.Log("Hit");
-            m_Player.TakeDamage();
+            m_Player.TakeDamage(m_Enemy);
+            //Debug.Log("Hit");
         }
     }
 

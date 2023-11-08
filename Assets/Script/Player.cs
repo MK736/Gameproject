@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
     Transform m_CameraTransform;
     Vector3 m_MoveDirection;
     Quaternion targetRotation;
-
+    [SerializeField]
     Enemy m_enemy;
 
     public Animator m_PlayerAnimmator = null;
@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
     {
         CheckGround();
         SpeedControl();
-        //Debug.Log(g_PlayerHP);
+        Debug.Log(g_PlayerHP);
     }
 
     void FixedUpdate()
@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
         Jump();
     }
 
-    public void TakeDamage()
+    public void TakeDamage(Enemy m_enemy)
     {
         g_PlayerHP -= 1;
         m_enemy.AtackEnd();
