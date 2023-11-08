@@ -145,11 +145,18 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        //Debug.Log("UŒ‚");
-        navMeshAgent.isStopped = true;
-        BearRunAnimStop();
-        BearAtackAnim();
-        AtackStart();
+        if (m_player.g_PlayerHP > 0)
+        {
+            navMeshAgent.isStopped = true;
+            BearRunAnimStop();
+            BearAtackAnim();
+            AtackStart();
+        }
+        //else
+        //{
+        //    destinationController.CreateDetination();
+        //    navMeshAgent.SetDestination(destinationController.GetDestination());
+        //}
     }
 
     void AtackStart()
@@ -164,7 +171,7 @@ public class Enemy : MonoBehaviour
 
     public void OnAttack(Collider collider)
     {
-        if (collider.CompareTag("Player")&& bearhp > 0)
+        if (collider.CompareTag("Player")/*&& bearhp > 0*/)
         {
             isAttack = true;
         }
@@ -204,7 +211,8 @@ public class Enemy : MonoBehaviour
 
     void BearAtackAnim()
     {
-        m_bear.SetBool("Atack1", true);
+        //m_bear.SetBool("Atack1", true);
+        m_bear.SetTrigger("Attack1");
     }
     void BearAtackAnimStop()
     {

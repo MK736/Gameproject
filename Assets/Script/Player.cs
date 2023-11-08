@@ -136,8 +136,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Death()
+    public void Death()
     {
+        m_PlayerAnimmator.SetBool("Death", true);
+        Destroy(gameObject, 1.5f);
         Debug.Log("Ž€–S");
     }
     void Move()
