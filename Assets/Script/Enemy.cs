@@ -38,6 +38,8 @@ public class Enemy : MonoBehaviour
 
     byte bearhp = 5;
 
+    public int atackPower = 5;
+
     [SerializeField]
     private BoxCollider BoxCollider;
 
@@ -145,12 +147,16 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        if (m_player.g_PlayerHP > 0)
+        if (m_player.isDead == false)
         {
             navMeshAgent.isStopped = true;
             BearRunAnimStop();
             BearAtackAnim();
             AtackStart();
+        }
+        else
+        {
+            m_bear.SetBool("Idle", true);
         }
         //else
         //{
@@ -158,6 +164,7 @@ public class Enemy : MonoBehaviour
         //    navMeshAgent.SetDestination(destinationController.GetDestination());
         //}
     }
+
 
     void AtackStart()
     {
@@ -171,7 +178,7 @@ public class Enemy : MonoBehaviour
 
     public void OnAttack(Collider collider)
     {
-        if (collider.CompareTag("Player")/*&& bearhp > 0*/)
+        if (collider.CompareTag("Player")&& bearhp > 0)
         {
             isAttack = true;
         }
@@ -211,8 +218,7 @@ public class Enemy : MonoBehaviour
 
     void BearAtackAnim()
     {
-        //m_bear.SetBool("Atack1", true);
-        m_bear.SetTrigger("Attack1");
+        m_bear.SetBool("Atack1", true);
     }
     void BearAtackAnimStop()
     {

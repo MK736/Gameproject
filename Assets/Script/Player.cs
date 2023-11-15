@@ -38,7 +38,11 @@ public class Player : MonoBehaviour
     private RaycastHit slopehit;
     private bool exitSlope;
 
-    public int g_PlayerHP = 20;
+    public int g_MaxPlayerHP = 0;
+    public int g_PlayerHP = 0;
+    protected PlayerGage playerGage;
+
+    public bool isDead = false;
 
     Rigidbody m_Rigidbody;
     Transform m_CameraTransform;
@@ -63,14 +67,20 @@ public class Player : MonoBehaviour
 
         m_enemy = GetComponent<Enemy>();
 
+        playerGage = GameObject.FindObjectOfType<PlayerGage>();
+        playerGage.SetPlayer(this);
+
         ReadyJump = true;
+        g_PlayerHP = 100;
+        g_MaxPlayerHP = 100;
     }
 
     void Update()
     {
         CheckGround();
         SpeedControl();
-        Debug.Log(g_PlayerHP);
+        //Debug.Log(g_PlayerHP);
+
     }
 
     void FixedUpdate()
@@ -117,8 +127,9 @@ public class Player : MonoBehaviour
     }
     public void OnAtack(InputAction.CallbackContext context)
     {
-        isAtack = true;
-        m_PlayerAnimmator.SetTrigger("atack");
+            isAtack = true;
+            m_PlayerAnimmator.SetTrigger("atack");
+
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -128,10 +139,12 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(Enemy m_enemy)
     {
-        g_PlayerHP -= 1;
+        playerGage.GaugeReduction(m_enemy.atackPower);
+        g_PlayerHP -= m_enemy.atackPower;
         m_enemy.AtackEnd();
         if (g_PlayerHP == 0)
         {
+            isDead = true;
             Death();
         }
     }
