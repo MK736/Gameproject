@@ -14,7 +14,7 @@ public class PlayerGage : MonoBehaviour
     private Player m_Player;
     private Tween redGaugeTween;
 
-    public void GaugeReduction(float redcationValue, float time = 1f)
+    public void GaugeReduction(float redcationValue, float time = 1.0f)
     {
         var valueFrom = m_Player.g_PlayerHP / m_Player.g_MaxPlayerHP;
         var valueTo = (m_Player.g_PlayerHP - redcationValue) / m_Player.g_MaxPlayerHP;
@@ -27,15 +27,9 @@ public class PlayerGage : MonoBehaviour
             redGaugeTween.Kill();
         }
 
-        // ÔƒQ[ƒWŒ¸­
-        redGaugeTween = DOTween.To(
-            () => valueFrom,
-            x => {
-                RedGauge.fillAmount = x;
-            },
-            valueTo,
-            time
-        );
+        DOVirtual.DelayedCall(0.5f, () => {
+            RedGauge.fillAmount = valueTo;
+        });
     }
 
     public void SetPlayer(Player m_Player)
