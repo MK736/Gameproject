@@ -48,6 +48,10 @@ public class BattleManager : MonoBehaviour, IDamageable
         {
             EnemyDeth = true;
         }
+        //else if(m_Player.g_PlayerHP < 0)
+        //{
+        //    m_Player.Death();
+        //}
     }
 
     public void Death(Collider other, int hp)

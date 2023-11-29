@@ -1061,6 +1061,7 @@ MonoBehaviour:
   g_PlayerHP: 20
   PlayerPower: 1
   m_boxCollider: {fileID: 4777289216998997751}
+  BodyCollider: {fileID: 4486205044800612381}
   isDead: 0
   m_enemy: {fileID: 0}
   m_PlayerAnimmator: {fileID: 2453280048757166383}

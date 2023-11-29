@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         UpdateAI();
-        Debug.Log(enemyHp);
+        //Debug.Log(enemyHp);
     }
 
     public void SetAi()
@@ -159,6 +159,7 @@ public class Enemy : MonoBehaviour
             BearRunAnimStop();
             BearAtackAnim();
             AtackStart();
+            //m_player.TakeDamage();
         }
         else
         {
@@ -187,6 +188,7 @@ public class Enemy : MonoBehaviour
         if (collider.CompareTag("Player")&& enemyHp > 0)
         {
             isAttack = true;
+
         }
     }
     public void OutAttack(Collider collider)

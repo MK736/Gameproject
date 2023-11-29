@@ -46,6 +46,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private BoxCollider m_boxCollider;
 
+    [SerializeField]
+    public CapsuleCollider BodyCollider = null;
+
     public bool isDead = false;
 
     Rigidbody m_Rigidbody;
@@ -170,35 +173,37 @@ public class Player : MonoBehaviour
     {
         Jump();
     }
-    void OnTriggerExit(Collider other)
+    //void OnTriggerExit(Collider other)
+    //{
+    //    IDamageable damageable = GetComponent<IDamageable>();
+    //    if (damageable != null)
+    //    {
+    //        Debug.Log("Hit");
+    //        damageable.Damagee(other, m_enemy.atackPower);
+    //        damageable.Death(other, g_PlayerHP);
+    //    }
+    //    playerGage.GaugeReduction(m_enemy.atackPower);
+    //    m_enemy.AtackEnd();
+    //    if (g_PlayerHP == 0)
+    //    {
+    //        isDead = true;
+    //        Death();
+    //    }
+    //}
+    public void TakeDamage(Enemy m_enemy)
     {
-        IDamageable damageable = GetComponent<IDamageable>();
-        if (damageable != null)
-        {
-            damageable.Damagee(other, m_enemy.atackPower);
-            damageable.Death(other, g_PlayerHP);
-        }
+        //m_PlayerAnimmator.SetTrigger("Hit");
         playerGage.GaugeReduction(m_enemy.atackPower);
+
+
+        g_PlayerHP = m_BattleManager.HpDown(g_PlayerHP, m_enemy.atackPower);
         m_enemy.AtackEnd();
         if (g_PlayerHP == 0)
         {
             isDead = true;
             Death();
+
         }
-    }
-        public void TakeDamage(Enemy m_enemy)
-    {
-        //m_PlayerAnimmator.SetTrigger("Hit");
-        //playerGage.GaugeReduction(m_enemy.atackPower);
-
-
-        //g_PlayerHP = m_BattleManager.HpDown(g_PlayerHP, m_enemy.atackPower);
-        //m_enemy.AtackEnd();
-        //if (g_PlayerHP == 0)
-        //{
-        //    isDead = true;
-        //    Death();
-        //}
     }
 
     public void Death()
