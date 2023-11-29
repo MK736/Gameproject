@@ -139,6 +139,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(Enemy m_enemy)
     {
+        //m_PlayerAnimmator.SetTrigger("Hit");
         playerGage.GaugeReduction(m_enemy.atackPower);
         g_PlayerHP -= m_enemy.atackPower;
         m_enemy.AtackEnd();

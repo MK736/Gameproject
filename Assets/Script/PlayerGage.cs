@@ -32,6 +32,20 @@ public class PlayerGage : MonoBehaviour
         });
     }
 
+    public void GaugeUp(float valueTo)
+    {
+        var valueto = valueTo;
+
+        GreenGauge.fillAmount = valueto;
+
+        if (redGaugeTween != null)
+        {
+            redGaugeTween.Kill();
+        }
+
+        RedGauge.fillAmount = valueto;
+    }
+
     public void SetPlayer(Player m_Player)
     {
         this.m_Player = m_Player;
