@@ -79,8 +79,8 @@ public class Player : MonoBehaviour
         m_BattleManager = GetComponent<BattleManager>();
 
         ReadyJump = true;
-        g_PlayerHP = 100;
-        g_MaxPlayerHP = 100;
+        g_PlayerHP = 500;
+        g_MaxPlayerHP = 500;
     }
 
     void Update()

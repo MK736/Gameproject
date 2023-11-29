@@ -54,6 +54,8 @@ public class BattleManager : MonoBehaviour, IDamageable
     {
         if (other.CompareTag("weapon")&&hp == 0)
         {
+            m_Enemy.Deth();
+            m_Enemy.m_BoxCollider.enabled = false;
             //EnemyDeth = true;
         }
     }

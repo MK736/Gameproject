@@ -43,7 +43,11 @@ public class Enemy : MonoBehaviour
     BattleManager m_BattleManager = null;
 
     [SerializeField]
-    private BoxCollider BoxCollider;
+    public BoxCollider m_BoxCollider = null;
+
+
+    [SerializeField]
+     BoxCollider BoxCollider;
 
     private NavMeshAgent navMeshAgent = null;
 
@@ -269,16 +273,10 @@ public class Enemy : MonoBehaviour
             //enemyHp--;
             //m_player.WeaponColOff();
             navMeshAgent.destination = player.transform.position;
-            if (/*m_BattleManager.Death(enemyHp)*/m_BattleManager.EnemyDeth == true)
-            {
-                Deth();
-            }
-            else
-            {
+
                 m_bear.SetTrigger("Get Hit Front");
                 Invoke("BearGo", 1.2f);
                 Invoke("BearRunAnimGo", 1.2f);
-            }
             //m_player.isAtack = false;
             Invoke("IsBearHitFalse", 1.2f);
 
@@ -315,7 +313,7 @@ public class Enemy : MonoBehaviour
         //    Invoke("IsBearHitFalse", 1.2f);
         //}
     }
-    void Deth()
+    public void Deth()
     {
         navMeshAgent.isStopped = true;
         m_bear.SetBool("Death", true);
