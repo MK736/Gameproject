@@ -41,6 +41,10 @@ public class Player : MonoBehaviour
     public int g_MaxPlayerHP = 0;
     public int g_PlayerHP = 0;
     protected PlayerGage playerGage;
+    public int PlayerPower = 1;
+
+    [SerializeField]
+    private BoxCollider m_boxCollider;
 
     public bool isDead = false;
 
@@ -52,6 +56,8 @@ public class Player : MonoBehaviour
     Enemy m_enemy;
 
     public Animator m_PlayerAnimmator = null;
+
+    private BattleManager m_BattleManager = null;
 
     Vector2 m_MoveInput;
 
@@ -69,6 +75,8 @@ public class Player : MonoBehaviour
 
         playerGage = GameObject.FindObjectOfType<PlayerGage>();
         playerGage.SetPlayer(this);
+
+        m_BattleManager = GetComponent<BattleManager>();
 
         ReadyJump = true;
         g_PlayerHP = 100;
@@ -127,10 +135,36 @@ public class Player : MonoBehaviour
     }
     public void OnAtack(InputAction.CallbackContext context)
     {
-            isAtack = true;
-            m_PlayerAnimmator.SetTrigger("atack");
+        // Ç±Ç±Ç≈ïêäÌÇÃìñÇΩÇËîªíËÇONÇ…Ç∑ÇÈÅB
+        isAtack = true;
+        WeaponColOn();
+        //m_boxCollider.enabled = true;
+        m_PlayerAnimmator.SetTrigger("atack");
 
     }
+
+    public void WeaponColOn()
+    {
+        m_boxCollider.enabled = true;
+    }
+
+    public void WeaponColOff()
+    {
+        m_boxCollider.enabled = false;
+    }
+
+    //public void WeaponCollider()
+    //{
+    //    if (isAtack)
+    //    {
+    //        m_boxCollider.enabled = true;
+    //        Debug.Log("åïìñÇΩÇËîªíËON");
+    //    }
+    //    else
+    //    {
+    //        m_boxCollider.enabled = false;
+    //    }
+    //}
 
     public void OnJump(InputAction.CallbackContext context)
     {
@@ -141,7 +175,7 @@ public class Player : MonoBehaviour
     {
         //m_PlayerAnimmator.SetTrigger("Hit");
         playerGage.GaugeReduction(m_enemy.atackPower);
-        g_PlayerHP -= m_enemy.atackPower;
+        g_PlayerHP = m_BattleManager.HpDown(g_PlayerHP, m_enemy.atackPower);
         m_enemy.AtackEnd();
         if (g_PlayerHP == 0)
         {

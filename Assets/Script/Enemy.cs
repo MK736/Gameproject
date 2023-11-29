@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
 
     public bool isAttack = false;
 
-    public Vector3[] wayPoints = new Vector3[3];
+    //public Vector3[] wayPoints = new Vector3[3];
     public enum EnemyAiState
     {
         WAIT,
@@ -36,9 +36,11 @@ public class Enemy : MonoBehaviour
     public EnemyAiState aiState = EnemyAiState.WAIT;
     public EnemyAiState nextState;
 
-    byte bearhp = 5;
+    public int enemyHp = 2;
 
-    public int atackPower = 5;
+    public int atackPower = 10;
+
+    BattleManager m_BattleManager = null;
 
     [SerializeField]
     private BoxCollider BoxCollider;
@@ -56,11 +58,13 @@ public class Enemy : MonoBehaviour
         m_Item = GetComponent<ItemManager>();
         destinationController = GetComponent<DestinationController>();
         navMeshAgent.SetDestination(destinationController.GetDestination());
+        m_BattleManager = GetComponent<BattleManager>();
     }
 
     private void Update()
     {
         UpdateAI();
+        Debug.Log(enemyHp);
     }
 
     public void SetAi()
@@ -132,7 +136,7 @@ public class Enemy : MonoBehaviour
     }
     void MoveAndAtack()
     {
-        if (isBearHit == false && bearhp > 0)
+        if (isBearHit == false && enemyHp > 0)
         {
             m_bear.SetBool("Detection", true);
             navMeshAgent.destination = player.transform.position;
@@ -178,7 +182,7 @@ public class Enemy : MonoBehaviour
 
     public void OnAttack(Collider collider)
     {
-        if (collider.CompareTag("Player")&& bearhp > 0)
+        if (collider.CompareTag("Player")&& enemyHp > 0)
         {
             isAttack = true;
         }
@@ -239,39 +243,79 @@ public class Enemy : MonoBehaviour
         navMeshAgent.isStopped = false;
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerExit(Collider other)
     {
-        if (m_player.isAtack == true && bearhp != 0)
+        //m_BattleManager.Damage(other/*, enemyHp, m_player.PlayerPower*/);
+
+        IDamageable damageable = GetComponent<IDamageable>();
+        if (damageable != null)
         {
-            if (other.CompareTag("weapon"))
-            {
-                isBearHit = true;
-                navMeshAgent.isStopped = true;
-                BearRunAnimStop();
-                BearAtackAnimStop();
-                bearhp--;
-                if (isSee == false)
-                {
-                    navMeshAgent.destination = player.transform.position;
-                }
-                if (bearhp != 0)
-                {
-                    m_bear.SetTrigger("Get Hit Front");
-                    if (isSee == true)
-                    {
-                        Invoke("BearGo", 1.2f);
-                        Invoke("BearRunAnimGo", 1.2f);
-                    }
-                }
-                else {
-                    BearDeth();
-                }
-            }
-            m_player.isAtack = false;
-            Invoke("IsBearHitFalse", 1.2f);
+            damageable.Damagee(other, enemyHp, m_player.PlayerPower);
+            damageable.Death(other, enemyHp);
         }
+        //if (other.CompareTag("weapon"))
+        //{
+        //    Debug.Log("åFÉ_ÉÅÅ[ÉW");
+        //}
+            //m_BattleManager.Atack(0, enemyHp);
+
+        if (/*m_BattleManager.EnemyDamage == true &&*/ enemyHp != 0)
+        {
+            m_player.WeaponColOff();
+            navMeshAgent.isStopped = true;
+            BearRunAnimStop();
+            BearAtackAnimStop();
+            //m_BattleManager.HpDown(enemyHp, m_player.PlayerPower);
+            //enemyHp--;
+            //m_player.WeaponColOff();
+            navMeshAgent.destination = player.transform.position;
+            if (/*m_BattleManager.Death(enemyHp)*/m_BattleManager.EnemyDeth == true)
+            {
+                Deth();
+            }
+            else
+            {
+                m_bear.SetTrigger("Get Hit Front");
+                Invoke("BearGo", 1.2f);
+                Invoke("BearRunAnimGo", 1.2f);
+            }
+            //m_player.isAtack = false;
+            Invoke("IsBearHitFalse", 1.2f);
+
+        }
+
+        //if (m_player.isAtack == true && enemyHp != 0)
+        //{
+        //    if (other.CompareTag("weapon"))
+        //    {
+        //        isBearHit = true;
+        //        //navMeshAgent.isStopped = true;
+        //        //BearRunAnimStop();
+        //        //BearAtackAnimStop();
+        //        //enemyHp = m_BattleManager.HpDown(enemyHp, 1);
+        //        //enemyHp--;
+        //        //if (isSee == false)
+        //        //{
+        //        //    navMeshAgent.destination = player.transform.position;
+        //        //}
+        //        if (enemyHp != 0)
+        //        {
+        //            m_bear.SetTrigger("Get Hit Front");
+        //            if (isSee == true)
+        //            {
+        //                Invoke("BearGo", 1.2f);
+        //                Invoke("BearRunAnimGo", 1.2f);
+        //            }
+        //        }
+        //        else {
+        //            Deth();
+        //        }
+        //    }
+        //    m_player.isAtack = false;
+        //    Invoke("IsBearHitFalse", 1.2f);
+        //}
     }
-    void BearDeth()
+    void Deth()
     {
         navMeshAgent.isStopped = true;
         m_bear.SetBool("Death", true);

@@ -25,6 +25,7 @@ public class EnemyAttack : MonoBehaviour
             if (m_Player.g_PlayerHP > 0)
             {
                 m_Player.TakeDamage(m_Enemy);
+                Debug.Log("HpDown");
             }
             else
             {

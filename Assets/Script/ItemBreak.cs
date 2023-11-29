@@ -6,6 +6,7 @@ public class ItemBreak : MonoBehaviour
 {
     GameObject player;
     Player m_Player;
+    BattleManager m_BattleManager;
 
     private PlayerGage playerGage;
 
@@ -14,10 +15,11 @@ public class ItemBreak : MonoBehaviour
         player = GameObject.Find("boy");
         m_Player = player.GetComponent<Player>();
 
+        m_BattleManager = player.GetComponent<BattleManager>();
+
         playerGage = GameObject.FindObjectOfType<PlayerGage>();
         playerGage.SetPlayer(m_Player);
     }
-
 
     private void OnCollisionEnter(Collision other)
     {
@@ -27,12 +29,14 @@ public class ItemBreak : MonoBehaviour
             if (m_Player.g_PlayerHP > 50)
             {
                 playerGage.GaugeUp(1.0f);
-                m_Player.g_PlayerHP = 100;
+                m_Player.g_PlayerHP = m_BattleManager.HpUp(m_Player.g_PlayerHP, 100);
+                //m_Player.g_PlayerHP = 100;
             }
             else
             {
                 playerGage.GaugeUp(0.5f);
-                m_Player.g_PlayerHP += 50;
+                m_Player.g_PlayerHP = m_BattleManager.HpUp(m_Player.g_PlayerHP, 50);
+                //m_Player.g_PlayerHP += 50;
             }
         }
 
