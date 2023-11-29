@@ -12,7 +12,7 @@ public class EnemyAttack : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("boy");
+        player = GameObject.Find("player1");
         m_Player = player.GetComponent<Player>();
         enemy = GameObject.Find("Enemy_Bear");
         m_Enemy = enemy.GetComponent<Enemy>();
