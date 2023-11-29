@@ -20,19 +20,19 @@ public class EnemyAttack : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            if (m_Player.g_PlayerHP > 0)
-            {
-                m_Player.TakeDamage(m_Enemy);
-                Debug.Log("HpDown");
-            }
-            else
-            {
-                m_Player.Death();
-            }
-            //Debug.Log("Hit");
-        }
+        //if (other.CompareTag("Player"))
+        //{
+        //    if (m_Player.g_PlayerHP > 0)
+        //    {
+        //        m_Player.TakeDamage(m_Enemy);
+        //        Debug.Log("HpDown");
+        //    }
+        //    else
+        //    {
+        //        m_Player.Death();
+        //    }
+        //    //Debug.Log("Hit");
+        //}
     }
 
 

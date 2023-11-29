@@ -12,7 +12,7 @@ public class ItemBreak : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("boy");
+        player = GameObject.Find("player1");
         m_Player = player.GetComponent<Player>();
 
         m_BattleManager = player.GetComponent<BattleManager>();
@@ -26,18 +26,7 @@ public class ItemBreak : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             Destroy(gameObject);
-            if (m_Player.g_PlayerHP > 50)
-            {
-                playerGage.GaugeUp(1.0f);
-                m_Player.g_PlayerHP = m_BattleManager.HpUp(m_Player.g_PlayerHP, 100);
-                //m_Player.g_PlayerHP = 100;
-            }
-            else
-            {
-                playerGage.GaugeUp(0.5f);
-                m_Player.g_PlayerHP = m_BattleManager.HpUp(m_Player.g_PlayerHP, 50);
-                //m_Player.g_PlayerHP += 50;
-            }
+            //m_Player.g_PlayerHP = m_BattleManager.HpUp(m_Player.g_PlayerHP, 50);
         }
 
     }

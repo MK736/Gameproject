@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    public void Damagee(Collider other, int hp, int atackPower);
+    public void Damagee(Collider other, int atackPower);
     public void Death(Collider other, int hp);
 }

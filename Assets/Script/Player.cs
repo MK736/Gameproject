@@ -170,18 +170,35 @@ public class Player : MonoBehaviour
     {
         Jump();
     }
-
-    public void TakeDamage(Enemy m_enemy)
+    void OnTriggerExit(Collider other)
     {
-        //m_PlayerAnimmator.SetTrigger("Hit");
+        IDamageable damageable = GetComponent<IDamageable>();
+        if (damageable != null)
+        {
+            damageable.Damagee(other, m_enemy.atackPower);
+            damageable.Death(other, g_PlayerHP);
+        }
         playerGage.GaugeReduction(m_enemy.atackPower);
-        g_PlayerHP = m_BattleManager.HpDown(g_PlayerHP, m_enemy.atackPower);
         m_enemy.AtackEnd();
         if (g_PlayerHP == 0)
         {
             isDead = true;
             Death();
         }
+    }
+        public void TakeDamage(Enemy m_enemy)
+    {
+        //m_PlayerAnimmator.SetTrigger("Hit");
+        //playerGage.GaugeReduction(m_enemy.atackPower);
+
+
+        //g_PlayerHP = m_BattleManager.HpDown(g_PlayerHP, m_enemy.atackPower);
+        //m_enemy.AtackEnd();
+        //if (g_PlayerHP == 0)
+        //{
+        //    isDead = true;
+        //    Death();
+        //}
     }
 
     public void Death()

@@ -42,12 +42,10 @@ public class Enemy : MonoBehaviour
 
     BattleManager m_BattleManager = null;
 
-    [SerializeField]
     public BoxCollider m_BoxCollider = null;
 
 
-    [SerializeField]
-     BoxCollider BoxCollider;
+     public BoxCollider AtackBoxCollider;
 
     private NavMeshAgent navMeshAgent = null;
 
@@ -176,12 +174,12 @@ public class Enemy : MonoBehaviour
 
     void AtackStart()
     {
-        BoxCollider.enabled = true;
+        AtackBoxCollider.enabled = true;
     }
 
     public void AtackEnd()
     {
-        BoxCollider.enabled = false;
+        AtackBoxCollider.enabled = false;
     }
 
     public void OnAttack(Collider collider)
@@ -249,69 +247,27 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        //m_BattleManager.Damage(other/*, enemyHp, m_player.PlayerPower*/);
-
         IDamageable damageable = GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.Damagee(other, enemyHp, m_player.PlayerPower);
+            damageable.Damagee(other, m_player.PlayerPower);
             damageable.Death(other, enemyHp);
         }
-        //if (other.CompareTag("weapon"))
-        //{
-        //    Debug.Log("åFÉ_ÉÅÅ[ÉW");
-        //}
-            //m_BattleManager.Atack(0, enemyHp);
 
-        if (/*m_BattleManager.EnemyDamage == true &&*/ enemyHp != 0)
+        if (enemyHp != 0)
         {
             m_player.WeaponColOff();
             navMeshAgent.isStopped = true;
             BearRunAnimStop();
             BearAtackAnimStop();
-            //m_BattleManager.HpDown(enemyHp, m_player.PlayerPower);
-            //enemyHp--;
-            //m_player.WeaponColOff();
             navMeshAgent.destination = player.transform.position;
 
                 m_bear.SetTrigger("Get Hit Front");
                 Invoke("BearGo", 1.2f);
                 Invoke("BearRunAnimGo", 1.2f);
-            //m_player.isAtack = false;
             Invoke("IsBearHitFalse", 1.2f);
 
         }
-
-        //if (m_player.isAtack == true && enemyHp != 0)
-        //{
-        //    if (other.CompareTag("weapon"))
-        //    {
-        //        isBearHit = true;
-        //        //navMeshAgent.isStopped = true;
-        //        //BearRunAnimStop();
-        //        //BearAtackAnimStop();
-        //        //enemyHp = m_BattleManager.HpDown(enemyHp, 1);
-        //        //enemyHp--;
-        //        //if (isSee == false)
-        //        //{
-        //        //    navMeshAgent.destination = player.transform.position;
-        //        //}
-        //        if (enemyHp != 0)
-        //        {
-        //            m_bear.SetTrigger("Get Hit Front");
-        //            if (isSee == true)
-        //            {
-        //                Invoke("BearGo", 1.2f);
-        //                Invoke("BearRunAnimGo", 1.2f);
-        //            }
-        //        }
-        //        else {
-        //            Deth();
-        //        }
-        //    }
-        //    m_player.isAtack = false;
-        //    Invoke("IsBearHitFalse", 1.2f);
-        //}
     }
     public void Deth()
     {

@@ -31,7 +31,7 @@ public class BattleManager : MonoBehaviour, IDamageable
     // case0 = player -> enemy
     // case1 = enemy -> player
 
-    public void Damagee(Collider other, int hp, int atackPower)
+    public void Damagee(Collider other, int atackPower)
     {
         if (other.CompareTag("weapon"))
         {
@@ -56,37 +56,7 @@ public class BattleManager : MonoBehaviour, IDamageable
         {
             m_Enemy.Deth();
             m_Enemy.m_BoxCollider.enabled = false;
-            //EnemyDeth = true;
+            m_Enemy.AtackBoxCollider.enabled = false;
         }
     }
-
-    //public void Damage(Collider other /*,int hp, int atackpower*/)
-    //{
-    //    if (other.CompareTag("weapon"))
-    //    {
-    //        Debug.Log("EnemyDamage");
-    //        EnemyDamage = true;
-    //        //HpDown(hp, atackpower);
-    //    }
-    //}
-    //public void Atack(int number, int hp)
-    //{
-    //    switch (number)
-    //    {
-    //        case 0:
-    //            if (m_Player.isAtack && hp !=0)
-    //            {
-    //                isAtack = true;
-    //                Debug.Log("ÉvÉåÉCÉÑÅ[çUåÇ");
-    //            }
-    //        break;
-    //    }
-    //}
-
-    //public bool Death(int hp)
-    //{
-    //    if (hp == 0)
-    //    {
-    //    }
-    //}
 }
