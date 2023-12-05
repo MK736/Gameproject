@@ -41,9 +41,10 @@ Varyings MToonShadowCasterVertex(const Attributes v)
 
     float3 normalWS = TransformObjectToWorldNormal(v.normalOS);
     const VertexPositionInfo position = MToon_GetShadowCasterVertex(v.vertex.xyz, normalWS);
-
     output.pos = position.positionCS;
-    output.uv = v.texcoord0;
+    output.positionWS = position.positionWS.xyz;
+    output.normalWS = TransformObjectToWorldNormal(normalWS);
+    output.viewDirWS = MToon_GetWorldSpaceNormalizedViewDir(output.positionWS);
 
     return output;
 }

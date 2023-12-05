@@ -74,7 +74,7 @@ namespace VRM
   ""version"": ""{1}"",
   ""displayName"": ""VRM Shaders"",
   ""description"": ""VRM Shaders"",
-  ""unity"": ""2021.3"",
+  ""unity"": ""2019.4"",
   ""keywords"": [
     ""vrm"",
     ""shader""
@@ -93,7 +93,7 @@ namespace VRM
   ""version"": ""{1}"",
   ""displayName"": ""VRM"",
   ""description"": ""VRM importer"",
-  ""unity"": ""2021.3"",
+  ""unity"": ""2019.4"",
   ""keywords"": [
     ""vrm"",
     ""importer"",
@@ -139,7 +139,7 @@ namespace VRM
   ""version"": ""{1}"",
   ""displayName"": ""VRM-1.0"",
   ""description"": ""VRM-1.0 importer"",
-  ""unity"": ""2021.3"",
+  ""unity"": ""2019.4"",
   ""keywords"": [
     ""vrm"",
     ""importer"",
@@ -176,7 +176,7 @@ namespace VRM
   ""version"": ""{0}"",
   ""displayName"": ""UniGLTF"",
   ""description"": ""GLTF importer and exporter"",
-  ""unity"": ""2021.3"",
+  ""unity"": ""2019.4"",
   ""keywords"": [
     ""gltf""
   ],

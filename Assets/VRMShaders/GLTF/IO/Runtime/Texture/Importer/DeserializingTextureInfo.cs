@@ -42,8 +42,6 @@ namespace VRMShaders
         /// </summary>
         public TextureWrapMode WrapModeV { get; }
 
-        public TextureImportTypes ImportTypes { get; }
-
         public DeserializingTextureInfo(byte[] imageData, string dataMimeType, ColorSpace colorSpace, bool useMipmap, FilterMode filterMode, TextureWrapMode wrapModeU, TextureWrapMode wrapModeV)
         {
             ImageData = imageData;
@@ -55,7 +53,7 @@ namespace VRMShaders
             WrapModeV = wrapModeV;
         }
 
-        public DeserializingTextureInfo(byte[] imageData, string dataMimeType, ColorSpace colorSpace, SamplerParam samplerParam, TextureImportTypes importTypes)
+        public DeserializingTextureInfo(byte[] imageData, string dataMimeType, ColorSpace colorSpace, SamplerParam samplerParam)
         {
             ImageData = imageData;
             DataMimeType = dataMimeType;
@@ -64,7 +62,6 @@ namespace VRMShaders
             FilterMode = samplerParam.FilterMode;
             WrapModeU = samplerParam.WrapModesU;
             WrapModeV = samplerParam.WrapModesV;
-            ImportTypes = importTypes;
         }
     }
 }

@@ -27,7 +27,7 @@ public class DestinationController : MonoBehaviour
     private void CreateRandomDestination()
     {
         int num = Random.Range(0, targets.Length);
-        SetDestination(new Vector3(targets[num].transform.position.x, targets[num].transform.position.y, targets[num].transform.position.z));
+        SetDestination(new Vector3(targets[num].transform.position.x, 0, targets[num].transform.position.z));
     }
 
     public void SetDestination(Vector3 position)

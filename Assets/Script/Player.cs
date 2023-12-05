@@ -14,9 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] Transform groundCheckTransform;
 
     [Header("PlayerMove")]
-    [SerializeField] float moveSpeed        = 0.5f;
+    [SerializeField] float moveSpeed        = 10;
     [SerializeField] float rotationSpeed    = 180;
-    [SerializeField] float groundDrag       = 1;
+    [SerializeField] float groundDrag       = 10;
 
     [Header("PlayerJump")]
     [SerializeField] float jumpForce        = 10;
@@ -84,7 +84,6 @@ public class Player : MonoBehaviour
         ReadyJump = true;
         g_PlayerHP = 500;
         g_MaxPlayerHP = 500;
-        WeaponColOff();
     }
 
     void Update()
@@ -196,7 +195,6 @@ public class Player : MonoBehaviour
         //m_PlayerAnimmator.SetTrigger("Hit");
         playerGage.GaugeReduction(m_enemy.atackPower);
 
-        // 洞窟ステージの敵のenemyunderとplayerunderを同じにする
 
         g_PlayerHP = m_BattleManager.HpDown(g_PlayerHP, m_enemy.atackPower);
         m_enemy.AtackEnd();
@@ -217,6 +215,7 @@ public class Player : MonoBehaviour
     void Move()
     {
             m_MoveDirection = directionTransform.forward * m_MoveInput.y + directionTransform.right * m_MoveInput.x;
+
             // スロープ
             if (OnSlope() && !exitSlope)
             {

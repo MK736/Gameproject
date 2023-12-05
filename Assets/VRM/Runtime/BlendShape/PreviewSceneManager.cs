@@ -245,29 +245,24 @@ namespace VRM
 
                 foreach (var x in bake.MaterialValueBindings)
                 {
-                    if (m_materialMap.TryGetValue(x.MaterialName, out var item))
+                    MaterialItem item;
+                    if (m_materialMap.TryGetValue(x.MaterialName, out item))
                     {
                         //Debug.Log("set material");
-                        if (item.PropMap.TryGetValue(x.ValueName, out _))
+                        PropItem prop;
+                        if (item.PropMap.TryGetValue(x.ValueName, out prop))
                         {
-                            var offsetValue = x.TargetValue - x.BaseValue;
-                            var targetPropName = x.ValueName;
-                            if (x.ValueName.EndsWith("_ST_S"))
+                            var valueName = x.ValueName;
+                            if (valueName.EndsWith("_ST_S")
+                            || valueName.EndsWith("_ST_T"))
                             {
-                                offsetValue.y = 0;
-                                offsetValue.w = 0;
-                                targetPropName = targetPropName.Substring(0, targetPropName.Length - 2);
-                            }
-                            else if (x.ValueName.EndsWith("_ST_T"))
-                            {
-                                offsetValue.x = 0;
-                                offsetValue.z = 0;
-                                targetPropName = targetPropName.Substring(0, targetPropName.Length - 2);
+                                valueName = valueName.Substring(0, valueName.Length - 2);
                             }
 
-                            var value = item.Material.GetVector(targetPropName);
-                            value += offsetValue * bake.Weight;
-                            item.Material.SetColor(targetPropName, value);
+                            var value = item.Material.GetVector(valueName);
+                            //Debug.LogFormat("{0} => {1}", valueName, x.TargetValue);
+                            value += ((x.TargetValue - x.BaseValue) * bake.Weight);
+                            item.Material.SetColor(valueName, value);
                         }
                     }
                 }

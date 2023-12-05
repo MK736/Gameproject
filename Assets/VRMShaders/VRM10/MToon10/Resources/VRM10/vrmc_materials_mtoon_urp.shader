@@ -75,7 +75,7 @@ Shader "VRM10/Universal Render Pipeline/MToon10"
             "IgnoreProjector" = "True"
         }
 
-        // Universal Forward Pass
+        // Built-in Forward Base Pass
         Pass
         {
             Name "UniversalForward"
@@ -92,6 +92,7 @@ Shader "VRM10/Universal Render Pipeline/MToon10"
             #pragma target 3.0
 
             // Unity defined keywords
+            #pragma multi_compile_fwdbase nolightmap nodynlightmap nodirlightmap novertexlight
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
@@ -122,7 +123,7 @@ Shader "VRM10/Universal Render Pipeline/MToon10"
             ENDHLSL
         }
 
-        // MToon Outline Pass
+        // Built-in Forward Base Pass
         Pass
         {
             Name "MToonOutline"
@@ -140,6 +141,7 @@ Shader "VRM10/Universal Render Pipeline/MToon10"
             #pragma target 3.0
 
             // Unity defined keywords
+            #pragma multi_compile_fwdbase nolightmap nodynlightmap nodirlightmap novertexlight
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
@@ -161,63 +163,7 @@ Shader "VRM10/Universal Render Pipeline/MToon10"
             ENDHLSL
         }
 
-        //  Depth Only Pass
-        Pass
-        {
-            Name "DepthOnly"
-            Tags { "LightMode" = "DepthOnly" }
-
-            Cull [_M_CullMode]
-            ZWrite On
-            ColorMask 0
-
-            HLSLPROGRAM
-            #pragma target 3.0
-
-            // Unity defined keywords
-            #pragma multi_compile_instancing
-
-            #pragma multi_compile __ _ALPHATEST_ON _ALPHABLEND_ON
-
-            #pragma vertex MToonDepthOnlyVertex
-            #pragma fragment MToonDepthOnlyFragment
-
-            #define MTOON_URP
-            
-            #include "./vrmc_materials_mtoon_depthonly_vertex.hlsl"
-            #include "./vrmc_materials_mtoon_depthonly_fragment.hlsl"
-            ENDHLSL
-        }
-
-        //  Depth Normals Pass
-        Pass
-        {
-            Name "DepthNormals"
-            Tags { "LightMode" = "DepthNormals" }
-
-            Cull [_M_CullMode]
-            ZWrite On
-
-            HLSLPROGRAM
-            #pragma target 3.0
-
-            // Unity defined keywords
-            #pragma multi_compile_instancing
-
-            #pragma multi_compile __ _ALPHATEST_ON _ALPHABLEND_ON
-            #pragma multi_compile __ _NORMALMAP
-
-            #pragma vertex MToonDepthNormalsVertex
-            #pragma fragment MToonDepthNormalsFragment
-
-            #define MTOON_URP
-            
-            #include "./vrmc_materials_mtoon_depthnormals_vertex.hlsl"
-            #include "./vrmc_materials_mtoon_depthnormals_fragment.hlsl"
-            ENDHLSL
-        }
-
-        //  Shadow Caster Pass
+        //  Shadow rendering pass
         Pass
         {
             Name "ShadowCaster"
@@ -231,6 +177,7 @@ Shader "VRM10/Universal Render Pipeline/MToon10"
             #pragma target 3.0
 
             // Unity defined keywords
+            #pragma multi_compile_shadowcaster nolightmap nodynlightmap nodirlightmap novertexlight
             #pragma multi_compile_instancing
 
             #pragma multi_compile __ _ALPHATEST_ON _ALPHABLEND_ON
