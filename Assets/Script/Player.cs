@@ -84,6 +84,7 @@ public class Player : MonoBehaviour
         ReadyJump = true;
         g_PlayerHP = 500;
         g_MaxPlayerHP = 500;
+        WeaponColOff();
     }
 
     void Update()

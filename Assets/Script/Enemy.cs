@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.Scripting.APIUpdating;
 
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(DestinationController))]
+//[RequireComponent(typeof(DestinationController))]
 
 public class Enemy : MonoBehaviour
 {
@@ -49,7 +49,16 @@ public class Enemy : MonoBehaviour
 
     private NavMeshAgent navMeshAgent = null;
 
-    [SerializeField] private DestinationController destinationController;
+    //[SerializeField] private DestinationController destinationController;
+
+    public Transform center;
+
+    Vector3 pos;
+
+    [SerializeField] float radius = 490;
+    [SerializeField] float waitTime = 2;
+    [SerializeField] float time = 0;
+
 
     void Awake()
     {
@@ -58,9 +67,12 @@ public class Enemy : MonoBehaviour
         m_player = player.GetComponent<Player>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         m_Item = GetComponent<ItemManager>();
-        destinationController = GetComponent<DestinationController>();
-        navMeshAgent.SetDestination(destinationController.GetDestination());
+        //destinationController = GetComponent<DestinationController>();
+        //navMeshAgent.SetDestination(destinationController.GetDestination());
         m_BattleManager = GetComponent<BattleManager>();
+        AtackEnd();
+        GotoNextPoint();
+
     }
 
     private void Update()
@@ -126,14 +138,20 @@ public class Enemy : MonoBehaviour
     }
     void Move()
     {
-        BearRunAnimGo();
-        BearGo();
-
-        if (Vector3.Distance(transform.position, destinationController.GetDestination()) < 10.0f)
+        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
         {
-            destinationController.CreateDetination();
-            navMeshAgent.SetDestination(destinationController.GetDestination());
+            m_bear.SetBool("Detection", false);
+            StopHere();
         }
+
+        //BearRunAnimGo();
+        //BearGo();
+
+        //if (Vector3.Distance(transform.position, destinationController.GetDestination()) < 10.0f)
+        //{
+        //    destinationController.CreateDetination();
+        //    navMeshAgent.SetDestination(destinationController.GetDestination());
+        //}
 
     }
     void MoveAndAtack()
@@ -173,6 +191,44 @@ public class Enemy : MonoBehaviour
     }
 
 
+    void GotoNextPoint()
+    {
+        navMeshAgent.isStopped = false;
+        m_bear.SetBool("Detection", true);
+
+        float posX = Random.Range(-1 * radius, radius);
+        float posZ = Random.Range(-1 * radius, radius);
+
+        pos = center.position;
+        pos.x += posX;
+        pos.z += posZ;
+
+        Vector3 direction = new Vector3(pos.x, transform.position.y, pos.z);
+
+        Quaternion rotation = Quaternion.LookRotation(direction - transform.position, Vector3.up);
+
+        transform.rotation = rotation;
+
+        navMeshAgent.destination = pos;
+
+    }
+
+    void StopHere()
+    {
+        navMeshAgent.isStopped = true;
+
+        m_bear.SetBool("Detection", false);
+
+        time += Time.deltaTime;
+
+        if (time > waitTime)
+        {
+            m_bear.SetBool("Detection", true);
+            GotoNextPoint();
+            time = 0;
+        }
+    }
+
     void AtackStart()
     {
         AtackBoxCollider.enabled = true;
@@ -193,6 +249,7 @@ public class Enemy : MonoBehaviour
     }
     public void OutAttack(Collider collider)
     {
+        AtackEnd();
         if (collider.CompareTag("Player"))
         {
             BearAtackAnimStop();
@@ -203,15 +260,16 @@ public class Enemy : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            navMeshAgent.destination = collider.transform.position;
+            navMeshAgent.destination = player.transform.position;
         }
     }
     public void OutDetectObject(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
-            destinationController.CreateDetination();
-            navMeshAgent.SetDestination(destinationController.GetDestination());
+            GotoNextPoint();
+            //destinationController.CreateDetination();
+            //navMeshAgent.SetDestination(destinationController.GetDestination());
         }
     }
     void IsBearHitTrue()
@@ -273,6 +331,7 @@ public class Enemy : MonoBehaviour
     }
     public void Deth()
     {
+        AtackEnd();
         navMeshAgent.isStopped = true;
         m_bear.SetBool("Death", true);
         Destroy(gameObject, 3.2f);
