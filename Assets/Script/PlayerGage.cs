@@ -11,13 +11,28 @@ public class PlayerGage : MonoBehaviour
     [SerializeField]
     private Image RedGauge;
 
-    private Player m_Player;
+    //private Player m_Player;
     private Tween redGaugeTween;
+
+    static public PlayerGage instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     public void GaugeReduction(float redcationValue, float time = 1.0f)
     {
-        var valueFrom = m_Player.g_PlayerHP / m_Player.g_MaxPlayerHP;
-        var valueTo = (m_Player.g_PlayerHP - redcationValue) / m_Player.g_MaxPlayerHP;
+        var valueFrom = MainManager.instance.m_Php / MainManager.instance.m_MaxPhp;
+        var valueTo = (MainManager.instance.m_Php - redcationValue) / MainManager.instance.m_MaxPhp;
 
         // óŒÉQÅ[ÉWå∏è≠
         GreenGauge.fillAmount = valueTo;
@@ -46,8 +61,8 @@ public class PlayerGage : MonoBehaviour
         RedGauge.fillAmount = valueto;
     }
 
-    public void SetPlayer(Player m_Player)
-    {
-        this.m_Player = m_Player;
-    }
+    //public void SetPlayer(Player m_Player)
+    //{
+    //    this.m_Player = m_Player;
+    //}
 }

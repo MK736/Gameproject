@@ -36,11 +36,11 @@ public class Enemy : MonoBehaviour
     public EnemyAiState aiState = EnemyAiState.WAIT;
     public EnemyAiState nextState;
 
-    public int enemyHp = 2;
+    //public int enemyHp = 2;
 
-    public int atackPower = 10;
+    //public int atackPower = 10;
 
-    BattleManager m_BattleManager = null;
+    //BattleManager m_BattleManager = null;
 
     public BoxCollider m_BoxCollider = null;
 
@@ -59,9 +59,21 @@ public class Enemy : MonoBehaviour
     [SerializeField] float waitTime = 2;
     [SerializeField] float time = 0;
 
+    //static public Enemy instance;
+
 
     void Awake()
     {
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //    DontDestroyOnLoad(this.gameObject);
+        //}
+        //else
+        //{
+        //    Destroy(this.gameObject);
+        //}
+
         m_bear = GetComponent<Animator>();
         player = GameObject.Find("player1");
         m_player = player.GetComponent<Player>();
@@ -69,7 +81,7 @@ public class Enemy : MonoBehaviour
         m_Item = GetComponent<ItemManager>();
         //destinationController = GetComponent<DestinationController>();
         //navMeshAgent.SetDestination(destinationController.GetDestination());
-        m_BattleManager = GetComponent<BattleManager>();
+        //m_BattleManager = GetComponent<BattleManager>();
         AtackEnd();
         GotoNextPoint();
 
@@ -79,6 +91,7 @@ public class Enemy : MonoBehaviour
     {
         UpdateAI();
         //Debug.Log(enemyHp);
+        //Debug.Log(Player.instance.g_PlayerHP);
     }
 
     public void SetAi()
@@ -156,10 +169,10 @@ public class Enemy : MonoBehaviour
     }
     void MoveAndAtack()
     {
-        if (isBearHit == false && enemyHp > 0)
+        if (isBearHit == false && MainManager.instance.m_Ehp > 0)
         {
             m_bear.SetBool("Detection", true);
-            navMeshAgent.destination = player.transform.position;
+            navMeshAgent.destination = m_player.transform.position;
         }
         //if(Vector3.Distance(transform.position, m_player.transform.position) < 20.0f)
         //{
@@ -171,7 +184,7 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        if (m_player.isDead == false)
+        if (MainManager.instance.isDead == false)
         {
             navMeshAgent.isStopped = true;
             BearRunAnimStop();
@@ -241,7 +254,7 @@ public class Enemy : MonoBehaviour
 
     public void OnAttack(Collider collider)
     {
-        if (collider.CompareTag("Player")&& enemyHp > 0)
+        if (collider.CompareTag("Player")&& MainManager.instance.m_Ehp > 0)
         {
             isAttack = true;
 
@@ -260,7 +273,7 @@ public class Enemy : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            navMeshAgent.destination = player.transform.position;
+            navMeshAgent.destination = m_player.transform.position;
         }
     }
     public void OutDetectObject(Collider collider)
@@ -307,27 +320,47 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        IDamageable damageable = GetComponent<IDamageable>();
-        if (damageable != null)
+        //IDamageable damageable = GetComponent<IDamageable>();
+        //if (damageable != null)
+        //{
+        //    damageable.Damagee(other, Player.instance.PlayerPower);
+        //    damageable.Death(other, enemyHp);
+        //}
+        if (other.CompareTag("weapon") && MainManager.instance.m_Ehp == 0)
         {
-            damageable.Damagee(other, m_player.PlayerPower);
-            damageable.Death(other, enemyHp);
+            Deth();
+            m_BoxCollider.enabled = false;
+            AtackBoxCollider.enabled = false;
         }
-
-        if (enemyHp != 0)
+        else if (other.CompareTag("weapon") && MainManager.instance.m_Ehp != 0)
         {
+            MainManager.instance.m_Ehp -= MainManager.instance.m_AtackPower;
             m_player.WeaponColOff();
             navMeshAgent.isStopped = true;
             BearRunAnimStop();
             BearAtackAnimStop();
-            navMeshAgent.destination = player.transform.position;
+            navMeshAgent.destination = m_player.transform.position;
 
-                m_bear.SetTrigger("Get Hit Front");
-                Invoke("BearGo", 1.2f);
-                Invoke("BearRunAnimGo", 1.2f);
+            m_bear.SetTrigger("Get Hit Front");
+            Invoke("BearGo", 1.2f);
+            Invoke("BearRunAnimGo", 1.2f);
             Invoke("IsBearHitFalse", 1.2f);
-
         }
+
+        //if (enemyHp != 0)
+        //{
+        //    Player.instance.WeaponColOff();
+        //    navMeshAgent.isStopped = true;
+        //    BearRunAnimStop();
+        //    BearAtackAnimStop();
+        //    navMeshAgent.destination = Player.instance.transform.position;
+
+        //        m_bear.SetTrigger("Get Hit Front");
+        //        Invoke("BearGo", 1.2f);
+        //        Invoke("BearRunAnimGo", 1.2f);
+        //    Invoke("IsBearHitFalse", 1.2f);
+
+        //}
     }
     public void Deth()
     {

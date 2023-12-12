@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    GameObject player;
-    Player m_Player;
+    //GameObject player;
+    //Player m_Player;
 
     GameObject enemy;
     Enemy m_Enemy;
 
     void Start()
     {
-        player = GameObject.Find("player1");
-        m_Player = player.GetComponent<Player>();
+        //player = GameObject.Find("player1");
+        //m_Player = player.GetComponent<Player>();
         enemy = GameObject.Find("Enemy_Bear");
         m_Enemy = enemy.GetComponent<Enemy>();
     }
@@ -22,14 +22,14 @@ public class EnemyAttack : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (m_Player.g_PlayerHP > 0)
+            if (MainManager.instance.m_Php > 0)
             {
-                m_Player.TakeDamage(m_Enemy);
+                MainManager.instance.TakeDamage(m_Enemy);
                 Debug.Log("HpDown");
             }
             else
             {
-                m_Player.Death();
+                MainManager.instance.isDead = true;
             }
             //Debug.Log("Hit");
         }
