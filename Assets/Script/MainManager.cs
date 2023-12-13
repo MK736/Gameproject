@@ -58,10 +58,10 @@ public class MainManager : MonoBehaviour
     //    m_Weaponcol.enabled = false;
     //}
 
-
     // 変数（データ）は行けるが関数実行（コライダーオンオフ）はできない模様
     public void TakeDamage(Enemy m_Enemy)
     {
+
         //m_PlayerAnimmator.SetTrigger("Hit");
         PlayerGage.instance.GaugeReduction(m_EAtackPower);
 
