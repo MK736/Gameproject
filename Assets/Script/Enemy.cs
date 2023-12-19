@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
         //}
 
         m_bear = GetComponent<Animator>();
-        player = GameObject.Find("player1");
+        player = GameObject.Find("Player");
         m_player = player.GetComponent<Player>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         m_Item = GetComponent<ItemManager>();

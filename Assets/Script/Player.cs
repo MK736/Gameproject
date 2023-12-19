@@ -65,7 +65,6 @@ public class Player : MonoBehaviour
 
     Vector2 m_MoveInput;
 
-
     Vector2 moveInput; // ˆÚ“®“ü—Í
     bool jumpInput;
 
@@ -162,7 +161,6 @@ public class Player : MonoBehaviour
         {
             Death();
         }
-
     }
 
     void FixedUpdate()
@@ -194,7 +192,8 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-            m_MoveInput = context.ReadValue<Vector2>();
+        m_MoveInput = context.ReadValue<Vector2>();
+
             switch (context.phase)
             {
                 case InputActionPhase.Started:
@@ -208,6 +207,7 @@ public class Player : MonoBehaviour
                     break;
             }
     }
+
     public void OnAtack(InputAction.CallbackContext context)
     {
         // ‚±‚±‚Å•Ší‚Ì“–‚½‚è”»’è‚ðON‚É‚·‚éB
@@ -233,6 +233,19 @@ public class Player : MonoBehaviour
     {
         //m_Rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         //jumpInput = value.isPressed;
+        //m_PlayerAnimmator.SetTrigger("jump");
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                m_PlayerAnimmator.SetBool("jump", true);
+                break;
+
+            case InputActionPhase.Canceled:
+                m_PlayerAnimmator.SetBool("jump", false);
+                break;
+            default:
+                break;
+        }
         Jump();
     }
 
@@ -268,7 +281,6 @@ public class Player : MonoBehaviour
         if (OnSlope() && !exitSlope)
         {
             m_Rigidbody.AddForce(GetSlopeMoveDirection() * moveSpeed * 20.0f, ForceMode.Force);
-
             if (m_Rigidbody.velocity.y > 0)
                 m_Rigidbody.AddForce(Vector3.down * 80.0f, ForceMode.Force);
         }

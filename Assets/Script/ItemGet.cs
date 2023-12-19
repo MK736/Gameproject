@@ -15,7 +15,7 @@ public class ItemGet : MonoBehaviour
     void Awake()
     {
         m_itemma = GetComponent<ItemManager>();
-        player = GameObject.Find("player1");
+        player = GameObject.Find("Player");
         m_player = player.GetComponent<Player>();
     }
 

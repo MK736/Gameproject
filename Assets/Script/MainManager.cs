@@ -16,6 +16,7 @@ public class MainManager : MonoBehaviour
     private BoxCollider m_Weaponcol;
     //public bool m_deth = false;
 
+
     // Enemy
     public int m_Ehp = 2;
     public int m_MaxEhp = 2;
@@ -46,6 +47,7 @@ public class MainManager : MonoBehaviour
     void Update()
     {
         //m_PlayerPosi = Player.instance.transform.position;
+
     }
 
     // Player
