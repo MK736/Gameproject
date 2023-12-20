@@ -4718,11 +4718,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4801223980423372884, guid: 3a562f977e67ea047b0936a9b7db5c58, type: 3}
       propertyPath: bgmSoundDatas.Array.data[0].volume
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4801223980423372884, guid: 3a562f977e67ea047b0936a9b7db5c58, type: 3}
       propertyPath: bgmSoundDatas.Array.data[1].volume
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4801223980423372884, guid: 3a562f977e67ea047b0936a9b7db5c58, type: 3}
       propertyPath: seSoundDatas.Array.data[0].audioClip
