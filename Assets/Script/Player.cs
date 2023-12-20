@@ -139,7 +139,7 @@ public class Player : MonoBehaviour
 
         //readyToJump = true;
 
-        transform.position = new Vector3(0,0,0);
+        transform.position = new Vector3(0, 0, 0);
     }
     void Update()
     {
@@ -194,18 +194,18 @@ public class Player : MonoBehaviour
     {
         m_MoveInput = context.ReadValue<Vector2>();
 
-            switch (context.phase)
-            {
-                case InputActionPhase.Started:
-                    m_PlayerAnimmator.SetBool("is_running", true);
-                    break;
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                m_PlayerAnimmator.SetBool("is_running", true);
+                break;
 
-                case InputActionPhase.Canceled:
-                    m_PlayerAnimmator.SetBool("is_running", false);
-                    break;
-                default:
-                    break;
-            }
+            case InputActionPhase.Canceled:
+                m_PlayerAnimmator.SetBool("is_running", false);
+                break;
+            default:
+                break;
+        }
     }
 
     public void OnAtack(InputAction.CallbackContext context)

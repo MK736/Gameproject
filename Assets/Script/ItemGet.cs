@@ -8,7 +8,7 @@ public class ItemGet : MonoBehaviour
 
     ItemManager m_itemma;
     GameObject player;
-    Player m_player;
+    PlayerScript m_player;
 
 
     // Start is called before the first frame update
@@ -16,7 +16,7 @@ public class ItemGet : MonoBehaviour
     {
         m_itemma = GetComponent<ItemManager>();
         player = GameObject.Find("Player");
-        m_player = player.GetComponent<Player>();
+        m_player = player.GetComponent<PlayerScript>();
     }
 
    void OnTriggerEnter(Collider other)
