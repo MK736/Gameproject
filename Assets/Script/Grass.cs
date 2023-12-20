@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class Grass : MonoBehaviour
 {
+    AnimationEventHook m_animEve;
+    GameObject m_gameObject;
+
+    private void Start()
+    {
+        m_gameObject = GameObject.Find("Player");
+        m_animEve = m_gameObject.GetComponent<AnimationEventHook>();
+    }
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            AnimationEventHook.instance.Index = 1;
-            AnimationEventHook.instance.IndexJump = 4;
+            m_animEve.Index = 1;
+            m_animEve.IndexJump = 4;
 
         }
     }
@@ -18,8 +26,8 @@ public class Grass : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            AnimationEventHook.instance.Index = 0;
-            AnimationEventHook.instance.IndexJump = 3;
+            m_animEve.Index = 0;
+            m_animEve.IndexJump = 3;
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AnimationEventHook : MonoBehaviour
 {
-    static public AnimationEventHook instance;
+    //static public AnimationEventHook instance;
     [SerializeField]
     private AudioPlayer audioPlayer;
 
@@ -18,19 +18,19 @@ public class AnimationEventHook : MonoBehaviour
 
     //public int clipIndex = 0;
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+    //private void Awake()
+    //{
+    //    if (instance == null)
+    //    {
+    //        instance = this;
+    //        DontDestroyOnLoad(this.gameObject);
+    //    }
+    //    else
+    //    {
+    //        Destroy(this.gameObject);
+    //    }
 
-    }
+    //}
 
     public void Step(AnimationEvent animationEvent)
     {

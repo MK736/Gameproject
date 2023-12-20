@@ -21,7 +21,7 @@ public class PlayerScript : MonoBehaviour
     private float _initFallSpeed = 2;
 
     //[Header("ÉJÉÅÉâ"), SerializeField]
-    //private Camera _targetCamera;
+    private Camera _targetCamera;
     private Transform _cameratransform;
 
     private Transform _transform;
@@ -81,9 +81,10 @@ public class PlayerScript : MonoBehaviour
         _transform = transform;
         _characterController = GetComponent<CharacterController>();
 
-        //if (_targetCamera == null)
-        //    _targetCamera = Camera.main;
-        _cameratransform = Camera.main.transform;
+        if (_targetCamera == null)
+            _targetCamera = Camera.main;
+
+        _cameratransform = _targetCamera.transform;
 
         m_PlayerAnimmator = GetComponent<Animator>();
         m_enemy = GetComponent<Enemy>();

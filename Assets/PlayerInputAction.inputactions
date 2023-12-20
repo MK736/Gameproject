@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "7663364c-3f4f-427b-8af1-a7502899b533",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -291,6 +300,28 @@
                     "action": "Atack",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Magnitude",
+                    "id": "7c3403a6-20b0-47c7-a6ac-f70ba03c89e7",
+                    "path": "Magnitude",
+                    "interactions": "QuickPress",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "input",
+                    "id": "fbfe4a71-d959-490b-bd01-f84974362627",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
